@@ -21,13 +21,13 @@ export class AppComponent implements OnInit {
     const width = this.img.width() - $(window).width();
     this.img.animate({
       left: -width + 'px'
-    }, 20000, 'linear', () => this.setAnimationRight());
+    }, 40000, 'linear', () => this.setAnimationRight());
   }
 
   setAnimationRight() {
     this.img.animate({
       left: '0px'
-    }, 20000, 'linear', () => this.setAnimationLeft());
+    }, 40000, 'linear', () => this.setAnimationLeft());
   }
 
 }
