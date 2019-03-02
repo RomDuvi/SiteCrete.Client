@@ -1,0 +1,42 @@
+@keyframes image-translation {
+    from {left:0px;}
+    to {left:unset;right:0px;}
+    /* 0%   {left: 0;}
+    50%  {left:unset;right: 0;}
+    100%  {left: 0;right:unset;} */
+}
+
+@-webkit-keyframes image-translation {
+    from {left:0;}
+    to {left:unset;right:0;}
+}
+
+.pic {
+    position: fixed;
+    left: 0;
+    right: unset; 
+    top: 0;
+    height: 100%;
+    z-index: -1;
+}
+
+.main {
+    position: fixed;
+    top: 0;
+    left:0;
+    height: 100%;
+    width: 100%;
+}
+
+.welcome {
+    text-align: center;
+    z-index: 15;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 100%;
+}
+
+.welcome-button {
+    position: relative;
+    top:50%;
+}
