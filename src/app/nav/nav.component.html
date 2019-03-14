@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-sm navbar-dark pl-0">
+  <div class="navbar-brand pr-3 pl-0 m-0" id="navbar-container">
+    <div class="d-inline-block p-0" id="logo-text">
+      Villa Skalaki
+    </div>
+    <div class="d-inline-block p-0" id="logo-container">
+      <img alt="logo" src="../../assets/logo.png" (click)="goToHome()" id="logo"/>
+    </div>
+  </div>
+  <div class="navbar-nav">
+    <a class="nav-item nav-link active" [routerLink]="['/description']" (click)="setActive($event.target)">Description</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Photos</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Equipments</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">A découvrir</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Livre d'or</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Tarifs</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Disponibilité</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">News</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Liens</a>
+    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Contact</a>
+  </div>
+</nav>

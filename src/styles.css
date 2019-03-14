@@ -1,4 +1,28 @@
 @font-face {
-    font-family: 'Signatra';
-    src: url('assets/signatra/Signatra.ttf')  format('truetype');
+    font-family: 'Borealis';
+    src: url('assets/font/Borea___.ttf')  format('truetype');
+}
+
+@font-face {
+    font-family: 'Candara';
+    src: url('assets/font/Candara.ttf')  format('truetype');
+}
+
+@font-face {
+    font-family: 'Candarab';
+    src: url('assets/font/Candarab.ttf')  format('truetype');
+}
+
+@font-face {
+    font-family: 'Candarai';
+    src: url('assets/font/Candarai.ttf')  format('truetype');
+}
+
+@font-face {
+    font-family: 'Candaraz';
+    src: url('assets/font/Candaraz.ttf')  format('truetype');
+}
+
+html{
+    height: 100%;
 }

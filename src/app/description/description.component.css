@@ -1,0 +1,21 @@
+.main-container {
+    font-family: 'Candara';
+    color: rgba(91, 156, 229, 255);
+    font-size: 1.2em;
+}
+
+.p-picture {
+    display: inline-block;
+}
+
+.p-picture img{
+    width: 100%;
+    height: auto;
+}
+
+.p-text {
+    vertical-align: top;
+    display: inline-block;
+    text-align: justify;
+    padding-right:0;
+}

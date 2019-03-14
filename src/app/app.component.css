@@ -1,59 +1,39 @@
-@keyframes image-translation {
-    from {left:0px;}
-    to {left:unset;right:0px;}
-    /* 0%   {left: 0;}
-    50%  {left:unset;right: 0;}
-    100%  {left: 0;right:unset;} */
-}
-
-@-webkit-keyframes image-translation {
-    from {left:0;}
-    to {left:unset;right:0;}
-}
-
-.pic {
-    position: fixed;
-    left: 0;
-    right: unset; 
-    top: 0;
+.router {
     height: 100%;
-    z-index: -1;
+    background-image: url('../assets/seamless_background.jpg');
+    background-repeat: repeat;
+    background-size: 100%;
+    display: inline-block;
 }
 
-.main {
-    position: fixed;
-    top: 0;
-    left:0;
-    height: 100%;
-    width: 100%;
-    font-family: 'Signatra';
-    color: white;
+#outlet {
+    height: 82%;
+    overflow-y: auto;
 }
 
-.welcome {
-    text-align: center;
-    z-index: 15;
-    height: 100%;
+#vertical-logo img{
+    width:100%;
+    opacity: 0.17;
 }
 
-.welcome-button {
-    position: relative;
-    top:40%;
-    vertical-align: middle;
-    font-size: 6em;
+#vertical-logo {
+    vertical-align: top;
+    height: 82%;
 }
 
-
-.enter-button {
-    margin-top: -150px;
-    font-size: 0.35em;
-}
-
-.footer {
+#footer {
+    height: 10%;
+    border-top: 8px solid rgba(91, 156, 229, 0.40);
+    text-align: center; 
+    display: inline-block;
     position: absolute;
     bottom: 0;
-    z-index: 15;
-    text-align: center;
-    width: 100%;
-    font-size: 3em;
+    left:0;
+    background-image: url('../assets/seamless_background.jpg');
+    background-repeat: repeat;
+}
+
+#footer img {
+    margin-top: -35px;
+    height: 125%;
 }
