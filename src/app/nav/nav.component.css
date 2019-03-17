@@ -4,14 +4,15 @@
     white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
     white-space: pre-wrap;
     font-family: 'Borealis';
-    width: 120px;  
+    width: 120px;
+    display: inline-block;
 }
 
 #navbar-container {
     height: 100%;
     cursor: pointer;
-    background-color: rgba(91, 156, 229, 0.603);
-    width: 175px;
+    /* background-color: rgba(91, 156, 229, 0.603); */
+    width: 160px;
 }
 
 #logo-container {
@@ -24,7 +25,7 @@
     height: 100%;
     width: auto;
     margin-top: -37px;
-    margin-left: -8px;
+    margin-left: -18px;
 }
 
 .active {
@@ -41,7 +42,7 @@
     padding:0;
     padding-left:16px;
     padding-right:16px;
-    height: 70px;;
+    height: 64px;
 }
 
 .navbar-nav {
@@ -60,4 +61,38 @@
     background: -webkit-linear-gradient(top, rgba(91, 156, 229, 0.603) 0%,rgba(91, 156, 229, 0.603) 89%,rgba(91, 156, 229, 0.603) 90%,#ffffff 90%,#ffffff 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, rgba(91, 156, 229, 0.603) 0%,rgba(91, 156, 229, 0.603) 89%,rgba(91, 156, 229, 0.603) 90%,#ffffff 90%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(91, 156, 229, 0.603)', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+.collapse {
+    height: 100%;
+    z-index: 10000;
+}
+
+.collapse a {
+    height: 100%;
+}
+
+#navbar-container {
+    margin : 0px;
+    padding-left: 0;
+}
+
+.nav-item .exp-a {
+    background-color: rgba(91, 156, 229);
+    padding: 5px;
+}
+
+.exp-a:hover {
+    color:white;
+    background: rgba(91, 156, 229) !important; /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(91, 156, 229) 0%, rgba(91, 156, 229) 89%, rgba(91, 156, 229) 90%, #ffffff 90%, #ffffff 100%) !important; /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(91, 156, 229) 0%,rgba(91, 156, 229) 89%,rgba(91, 156, 229) 90%,#ffffff 90%,#ffffff 100%) !important; /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(91, 156, 229) 0%,rgba(91, 156, 229) 89%,rgba(91, 156, 229) 90%,#ffffff 90%,#ffffff 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(91, 156, 229)', endColorstr='#ffffff',GradientType=0 ) !important; /* IE6-9 */
+}
+
+@media only screen and (max-width: 580px) {
+    .navbar-collapse {
+        margin-right: -20px;
+    }
 }

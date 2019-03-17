@@ -9,6 +9,7 @@
 #outlet {
     height: 82%;
     overflow-y: auto;
+    padding: 0;
 }
 
 #vertical-logo img{
@@ -19,11 +20,12 @@
 #vertical-logo {
     vertical-align: top;
     height: 82%;
+    display: inline-block;
 }
 
 #footer {
-    height: 10%;
-    border-top: 8px solid rgba(91, 156, 229, 0.40);
+    height: 6%;
+    border-top: 6px solid rgba(91, 156, 229, 0.40);
     text-align: center; 
     display: inline-block;
     position: absolute;
@@ -34,6 +36,89 @@
 }
 
 #footer img {
-    margin-top: -35px;
-    height: 125%;
+    margin-top: -60px;
+    height: 240%;
+}
+
+
+/** SKALAKI */
+
+.pic {
+    position: fixed;
+    left: 0;
+    right: unset; 
+    top: 0;
+    height: 100%;
+    z-index: -1;
+}
+
+.main {
+    position: fixed;
+    top: 0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Borealis';
+    color: white;
+}
+
+.welcome {
+    text-align: center;
+    z-index: 15;
+    height: 100%;
+}
+
+.welcome-button {
+    position: relative;
+    top:40%;
+    vertical-align: middle;
+    font-size: 6em;
+}
+
+
+.enter-button {
+    margin-top: -150px;
+    font-size: 0.35em;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    z-index: 15;
+    text-align: center;
+    width: 100%;
+    font-size: 3em;
+}
+
+
+@media only screen and (max-width: 580px) {
+    #footer {
+        display: none;
+    }
+
+    #vertical-logo {
+        display: none;
+    }
+
+    /* SKALAKI */
+    .welcome-button {
+        position: relative;
+        top:20%;
+        vertical-align: middle;
+        font-size: 2.8em;
+    }
+
+    .enter-button {
+        margin-bottom: -150px;
+        font-size: 0.35em;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        z-index: 15;
+        text-align: center;
+        width: 100%;
+        font-size: 1.9em;
+    }
 }

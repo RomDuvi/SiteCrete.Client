@@ -1,0 +1,53 @@
+.main-container {
+    color: rgb(91, 156, 229);
+    font-family: 'Candara';
+    font-size: 1.2em;
+}
+
+.section {
+    border-bottom: 2px solid rgba(91, 156, 229, 0.40);
+    padding: 0;
+}
+
+.section > div {
+    display: inline-block;
+}
+
+.section > div > div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.section-title {
+    vertical-align: top;
+    font-weight: bold;
+    padding: 0px; 
+}
+
+.equipment {
+    margin: 10px 10px 10px 10px;
+}
+
+.equipment-inline {
+    display: inline-block;
+}
+
+.equipment .description-center {
+    text-align: center;
+}
+
+.pic img {
+    display: inline-block;
+    height: 40px;
+}
+
+.pic-desc {
+    margin-left: 5px;
+    display: inline-block;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+.no-border {
+    border: none;
+}

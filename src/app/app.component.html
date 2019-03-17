@@ -1,14 +1,27 @@
-<div class="router col-lg-12 p-0">
-    <div class="d-inline-block col-lg-12 p-0" id="nav">
-        <app-nav></app-nav>
+<div class="router col-lg-12 p-0" *ngIf="entered">
+  <div class="d-inline-block col-lg-12 p-0" id="nav">
+    <app-nav></app-nav>
+  </div>
+  <div class="col-sm-1 pt-2 pl-2 pr-2" id="vertical-logo">
+    <img src="../assets/Skalaki_grec.png" alt="skalakigrec"/>
+  </div>
+  <div class="col-sm-11 d-inline-block pr-1" id="outlet">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="col-lg-12 p-0" id="footer">
+    <img src="../assets/logo.png" alt="logo">
+  </div>
+</div>
+
+<div style="text-align:center" class="main" *ngIf="!entered" resize>
+  <img src="../assets/fond_accueil.jpg" class="pic" alt="background" id="bgrnd" />
+  <div class="welcome">
+    <div class="welcome-button">
+      <p class="m-0">Skalaki</p>
+      <button type="button" class="btn btn-outline-light enter-button" (click)="onEnter()">Enter</button>
     </div>
-    <div class="col-sm-1 pt-2 pl-2 pr-2 d-lg-inline-block" id="vertical-logo">
-        <img src="../assets/Skalaki_grec.png"/>
+    <div class="footer">
+      <p>Hébergement tout confort en Crète authentique</p>
     </div>
-    <div class="col-sm-11 d-inline-block pr-1" id="outlet">
-        <router-outlet></router-outlet>
-    </div>
-    <div class="col-lg-12 p-0" id="footer">
-        <img src="../assets/logo.png">
-    </div>
+  </div>
 </div>

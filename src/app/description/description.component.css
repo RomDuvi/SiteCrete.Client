@@ -2,10 +2,12 @@
     font-family: 'Candara';
     color: rgba(91, 156, 229, 255);
     font-size: 1.2em;
+    padding: 0;
 }
 
 .p-picture {
     display: inline-block;
+    padding-left: 0;
 }
 
 .p-picture img{
@@ -18,4 +20,14 @@
     display: inline-block;
     text-align: justify;
     padding-right:0;
+}
+
+@media only screen and (max-width: 580px) {
+    .p-picture {
+        padding: 0 0 15px 0;
+    }
+
+    .p-text {
+        padding: 0;
+    }
 }

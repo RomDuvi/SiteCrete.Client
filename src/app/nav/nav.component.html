@@ -1,22 +1,48 @@
-<nav class="navbar navbar-expand-sm navbar-dark pl-0">
-  <div class="navbar-brand pr-3 pl-0 m-0" id="navbar-container">
-    <div class="d-inline-block p-0" id="logo-text">
-      Villa Skalaki
+<nav class="navbar navbar-expand-lg navbar-dark pl-0">
+    <div class="navbar-brand pr-3" id="navbar-container">
+      <div class="p-0" id="logo-text">
+        Villa Skalaki
+      </div>
+      <div class="d-inline-block p-0" id="logo-container">
+        <img alt="logo" src="../../assets/logo.png" (click)="goToHome()" id="logo" />
+      </div>
     </div>
-    <div class="d-inline-block p-0" id="logo-container">
-      <img alt="logo" src="../../assets/logo.png" (click)="goToHome()" id="logo"/>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link active" [class.exp-a]="expanded" [routerLink]="['/description']">Description</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/pictures']">Photos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/equipment']">Equipments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/discover']">A découvrir</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/book']">Livre d'or</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/prices']">Tarifs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/disponibilities']">Disponibilité</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/news']">News</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/links']">Liens</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/contact']">Contact</a>
+        </li>
+      </ul>
     </div>
-  </div>
-  <div class="navbar-nav">
-    <a class="nav-item nav-link active" [routerLink]="['/description']" (click)="setActive($event.target)">Description</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Photos</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Equipments</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">A découvrir</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Livre d'or</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Tarifs</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Disponibilité</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">News</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Liens</a>
-    <a class="nav-item nav-link" (click)="setActive($event.target)" href="#">Contact</a>
-  </div>
-</nav>
+  </nav>

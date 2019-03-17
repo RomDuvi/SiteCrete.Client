@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { TagContentType } from '@angular/compiler';
 
 @Component({
   selector: 'app-nav',
@@ -9,9 +8,21 @@ import { TagContentType } from '@angular/compiler';
 })
 export class NavComponent implements OnInit {
 
+  public expanded: boolean;
+
   constructor(private router: Router) { }
 
   ngOnInit() {
+    this.expanded = $('.navbar-toggler').is(":visible");
+    $('.nav-item').on('click', event => {
+      $('.active').removeClass('active');
+      $(event.target).addClass('active');
+    });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(){
+    this.expanded = $('.navbar-toggler').is(":visible");
   }
 
   goToHome() {
@@ -19,8 +30,8 @@ export class NavComponent implements OnInit {
   }
 
   setActive(target: HTMLElement) {
-    $('.nav-item').removeClass('active');
-    target.classList.add('active');
+    // $('.active').removeClass('active');
+    // target.classList.add('active');
   }
 
 }
