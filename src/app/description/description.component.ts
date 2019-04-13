@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-description',
@@ -7,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DescriptionComponent implements OnInit {
 
-  constructor() { }
+  constructor() {  }
 
   ngOnInit() {
-    $('#footer').css('display', 'inlxine-block');
+    $('.active').removeClass('active');
+    $('#description-nav').addClass('active');
   }
 
 }

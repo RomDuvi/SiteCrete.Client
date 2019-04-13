@@ -22,6 +22,10 @@
     padding-right:0;
 }
 
+#plan {
+    padding-top: 5px;
+}
+
 @media only screen and (max-width: 580px) {
     .p-picture {
         padding: 0 0 15px 0;

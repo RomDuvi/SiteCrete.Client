@@ -1,0 +1,29 @@
+.main-container {
+    font-family: 'Candara';
+    color: rgba(91, 156, 229, 255);
+    font-size: 1.2em;
+    padding: 0;
+}
+
+img {
+    max-height: 40px;
+}
+
+#contact {
+    margin-top: 80px;
+}
+
+#email {
+    font-family: 'Candara';
+    color: rgba(91, 156, 229, 255);
+}
+
+#fb {
+    max-width: 75px;
+}
+
+.main-container > div {
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}

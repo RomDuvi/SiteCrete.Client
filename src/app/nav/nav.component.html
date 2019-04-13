@@ -13,36 +13,55 @@
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link active" [class.exp-a]="expanded" [routerLink]="['/description']">Description</a>
+        <li class="nav-item active">
+          <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/description']" id="description-nav">{{'Description'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/pictures']">Photos</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/pictures']" id="pictures-nav">{{'Photos'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/equipment']">Equipments</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/equipment']" id="equipment-nav">{{'Equipements'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/discover']">A découvrir</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/discover']" id="discover-nav">{{'A découvrir'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/book']">Livre d'or</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/book']" id="book-nav">{{'Livre d\'or'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/prices']">Tarifs</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/prices']" id="prices-nav">{{'Tarifs'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/disponibilities']">Disponibilité</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/disponibilities']" id="disponibilities-nav">{{'Disponibilités'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/news']">News</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/news']" id="news-nav">{{'News'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/links']">Liens</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/links']" id="links-nav">{{'Liens'|translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/contact']">Contact</a>
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/addresses']" id="addresses-nav">{{'Bonnes adresses'|translate}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/contact']" id="contact-nav">{{'Contact'|translate}}</a>
+        </li>
+        <li class="nav-item" id="width-flags">
+          <span>
+            <img src="../../assets/fr_flag.png" (click)="setLanguage('fr')" alt="fr_flag" class="mr-2 flag flag-border" [class.flag-border]="isCurrentLanguage('fr')" />
+          </span>
+          <span>
+            <img src="../../assets/en_flag.png" (click)="setLanguage('en')" alt="en_flag" class="flag" [class.flag-border]="isCurrentLanguage('en')"/>
+          </span>
         </li>
       </ul>
+    </div>
+    <div id="flags">
+      <span>
+        <img src="../../assets/fr_flag.png" (click)="setLanguage('fr')" alt="fr_flag" class="mr-2 flag flag-border" [class.flag-border]="isCurrentLanguage('fr')" />
+      </span>
+      <span>
+        <img src="../../assets/en_flag.png" (click)="setLanguage('en')" alt="en_flag" class="flag" [class.flag-border]="isCurrentLanguage('en')"/>
+      </span>
     </div>
   </nav>

@@ -1,0 +1,7 @@
+.picture {
+    display: inline-block;
+}
+
+.picture img {
+    max-width: 250px;
+}

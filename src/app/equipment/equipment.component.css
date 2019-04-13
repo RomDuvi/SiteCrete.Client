@@ -1,11 +1,11 @@
 .main-container {
     color: rgb(91, 156, 229);
     font-family: 'Candara';
-    font-size: 1.2em;
+    font-size: 1.2em; 
 }
 
 .section {
-    border-bottom: 2px solid rgba(91, 156, 229, 0.40);
+    border-top: 2px solid rgba(91, 156, 229, 0.40);
     padding: 0;
 }
 
@@ -50,4 +50,15 @@
 
 .no-border {
     border: none;
+}
+
+#general {
+    margin-bottom: 30px;
+}
+
+@media only screen and (min-width: 580px) {
+    .vertical-center {  
+        display: flex;
+        align-items: center;
+    }
 }

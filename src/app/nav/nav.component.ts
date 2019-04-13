@@ -1,5 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, HostListener, AfterContentInit } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-nav',
@@ -10,28 +11,36 @@ export class NavComponent implements OnInit {
 
   public expanded: boolean;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private translate: TranslateService
+  ) {
+
+  }
 
   ngOnInit() {
-    this.expanded = $('.navbar-toggler').is(":visible");
+    this.expanded = $('.navbar-toggler').is(':visible');
     $('.nav-item').on('click', event => {
-      $('.active').removeClass('active');
-      $(event.target).addClass('active');
+      if ( this.expanded ) {
+        $('.navbar-collapse').removeClass('show');
+      }
     });
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(){
-    this.expanded = $('.navbar-toggler').is(":visible");
+  onResize() {
+    this.expanded = $('.navbar-toggler').is(':visible');
   }
 
   goToHome() {
-    this.router.navigateByUrl('/home');
+    this.router.navigate(['/description']);
   }
 
-  setActive(target: HTMLElement) {
-    // $('.active').removeClass('active');
-    // target.classList.add('active');
+  setLanguage(lg: string) {
+    this.translate.use(lg);
   }
 
+  isCurrentLanguage(lg: string): boolean{
+    return this.translate.currentLang === lg;
+  }
 }

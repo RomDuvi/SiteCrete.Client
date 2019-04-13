@@ -43,6 +43,7 @@
     padding-left:16px;
     padding-right:16px;
     height: 64px;
+    z-index: 9999;
 }
 
 .navbar-nav {
@@ -91,8 +92,38 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(91, 156, 229)', endColorstr='#ffffff',GradientType=0 ) !important; /* IE6-9 */
 }
 
+.flag {
+    max-width: 30px;
+    cursor: pointer;
+}
+
+.flag-border {
+    border: 3px solid rgb(69, 119, 177);
+    border-radius: 50%;
+    max-width: 33px;
+}
+
+#flags {
+    display: block;
+}
+
+#width-flags {
+    display: none;
+}
+
 @media only screen and (max-width: 580px) {
     .navbar-collapse {
         margin-right: -20px;
+    }
+
+    #flags {
+        display: none;
+    }
+
+    #width-flags {
+        display: block;
+        background-color: rgba(91, 156, 229);
+        text-align: center;
+        padding: 5px;
     }
 }

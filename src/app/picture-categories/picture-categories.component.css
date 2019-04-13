@@ -1,0 +1,54 @@
+.main-container {
+    font-family: 'Candara';
+    color: rgba(91, 156, 229, 255);
+    font-size: 1.2em;
+    padding: 0;
+}
+
+#title img{
+    max-height: 40px;
+}
+
+#categories {
+    margin-top: 80px;
+    text-align: center;
+}
+
+#categories img {
+    max-width: 310px;
+}
+
+.category {
+    margin: 15px;
+    padding-top: 15px; 
+    max-width: 330px;
+    background-color: white;
+    font-family: 'Candara';
+    display: inline-block;
+    font-size: 1.2em;
+    border: 2px solid rgba(91, 156, 229);
+    cursor: pointer;
+    transition: transform .25s ease;
+}
+
+.category:hover{
+    transform: scale(1.02);
+}
+
+@media only screen and (max-width: 580px) {
+    #categories img {
+        max-width: 230px;
+    }
+    
+    .category {
+        padding-top: 15px; 
+        max-width: 250px;
+        background-color: white;
+        font-family: 'Candara';
+        display: inline-block;
+        font-size: 1.2em;
+        border: 2px solid rgba(91, 156, 229);
+        cursor: pointer;
+        transition: transform .25s ease;
+    }
+}

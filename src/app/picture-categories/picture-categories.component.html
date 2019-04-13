@@ -1,0 +1,24 @@
+<div class="mt-5 col-md-12 main-container">
+  <div class="col-sm-12 col-md-10 m-auto">
+    <div class="text-center" id="title">
+      <img src="../../assets/icon_photo.png" alt="euro">
+      <div>
+        {{'PHOTOS' | translate}}
+      </div>
+    </div>
+    <div id="categories">
+      <div class="category" (click)="navigate('villa')">
+        <p>Villa Skalaki</p>
+        <img src="../../assets/villa_skalaki.jpg" alt="villa_skalaki" />
+      </div>
+      <div class="category col-md-2 col-sm-12" (click)="navigate('environs')">
+        <p>{{'Alentours' | translate}}</p>
+        <img src="../../assets/alentours.jpg" alt="alentours" />
+      </div>
+      <div class="category col-md-2 col-sm-12" (click)="navigate('east')" >
+        <p>{{'Crète de l\'Est' | translate}}</p>
+        <img src="../../assets/crete_est.jpg" alt="crete_est" />
+      </div>
+    </div>
+  </div>
+</div>
