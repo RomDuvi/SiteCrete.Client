@@ -17,6 +17,7 @@ import { PricesComponent } from './prices/prices.component';
 import { ContactComponent } from './contact/contact.component';
 import { PictureCategoriesComponent } from './picture-categories/picture-categories.component';
 import { PicturesComponent } from './pictures/pictures.component';
+import { DiscoverComponent } from './discover/discover.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/description', pathMatch: 'full'},
@@ -29,7 +30,7 @@ const appRoutes: Routes = [
   {path: 'news', component: UnderConstructionComponent},
   {path: 'links', component: UnderConstructionComponent},
   {path: 'contact', component: ContactComponent},
-  {path: 'discover', component: UnderConstructionComponent},
+  {path: 'discover', component: DiscoverComponent},
   {path: 'prices', component: PricesComponent},
   {path: 'addresses', component: UnderConstructionComponent}
 ];
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
     PricesComponent,
     ContactComponent,
     PictureCategoriesComponent,
-    PicturesComponent
+    PicturesComponent,
+    DiscoverComponent
   ],
   imports: [
     BrowserModule,
