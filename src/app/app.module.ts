@@ -7,7 +7,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
-import { SkalakiComponent } from './skalaki/skalaki.component';
 import { NavComponent } from './nav/nav.component';
 import { DescriptionComponent } from './description/description.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -38,7 +37,6 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    SkalakiComponent,
     NavComponent,
     DescriptionComponent,
     UnderConstructionComponent,

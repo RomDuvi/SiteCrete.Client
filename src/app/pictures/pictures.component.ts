@@ -47,7 +47,7 @@ export class PicturesComponent implements OnInit {
         '27 villa face est',
         '28 vue 1',
         '29 vue 3',
-        '30 vue 2',]
+        '30 vue 2']
     },
     environs : {
       path: '../../assets/Alentours/',
@@ -93,8 +93,8 @@ export class PicturesComponent implements OnInit {
         '12 Spinalonga',
         '13 Plateau de Lassithi',
         '14 Plateau de Lassithi',
-        '15 Xerokambos',
-        '16 Xerokambos'
+        '15 Xerokampos',
+        '16 Xerokampos'
       ]
     }
   };
@@ -106,12 +106,16 @@ export class PicturesComponent implements OnInit {
     $('#pictures-nav').addClass('active');
     const cat = this.pictures[this.route.snapshot.params.id];
     cat.pics.forEach((element: string) => {
+      //remove number and add uppercase
+      let name = element.replace(/[0-9]/g, '');
+      name = this.removeEmptyChars(name);
+      const nameUppercase = name.charAt(0).toUpperCase() + name.slice(1);
       this.galleryImages.push(
         {
           small: cat.path + element + '-' + cat.extension,
           medium: cat.path + element + cat.extension,
           big: cat.path + element + cat.extension,
-          description: `${cat.pics.indexOf(element) + 1} / ${cat.pics.length}`
+          description: `${nameUppercase}<br/>${cat.pics.indexOf(element) + 1} / ${cat.pics.length}`
         }
       );
     });
@@ -144,5 +148,12 @@ export class PicturesComponent implements OnInit {
           thumbnailsRows:  Math.ceil(this.galleryImages.length / 2),
       }
     ];
+  }
+
+  removeEmptyChars(s: string): string {
+    while (s.charAt(0).match(/\s+/g)) {
+      s = s.slice(1);
+    }
+    return s;
   }
 }

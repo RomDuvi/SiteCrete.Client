@@ -33,7 +33,7 @@ export class NavComponent implements OnInit {
   }
 
   goToHome() {
-    this.router.navigate(['/description']);
+    this.router.navigate(['/']);
   }
 
   setLanguage(lg: string) {

@@ -3,17 +3,19 @@
       <div class="text-center">
         <img alt="discover" src="../../assets/icone_discover.png" id="discover-icon">
         <div>
-          DISCOVER
+          {{'A DECOUVRIR' | translate}}
         </div>
       </div>
       <div class="text-center col-md-8 offset-md-2 mb-3 col-sm-12" id="discover">
-          Moins touristique que la partie ouest de l'île, la Crète orientale a gardé un caractère rustique et authentique.
-          Plages paradisiaques, côtes rocheuses majestueuses, villages pittoresques, sites archéologiques,
-          gorges arides et impressionnantes, les sites d'intérêt ne manquent pas.
+          {{discover1}}
       </div>
-      <div class="text-center">
+      <div class="text-center" *ngIf="currentLang === 'fr'" >
         <iframe width="100%" height="500px" frameborder="0" allowfullscreen src="https://umap.openstreetmap.fr/fr/map/crete-de-lest_308392?scaleControl=true&miniMap=false&scrollWheelZoom=false&zoomControl=true&allowEdit=false&moreControl=true&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=null&onLoadPanel=undefined&captionBar=false&datalayers=813223&fullscreenControl=true&measureControl=false&editinosmControl=false">
         </iframe>
+      </div>
+      <div class="text-center" *ngIf="currentLang === 'en'" >
+          <iframe width="100%" height="500px" frameborder="0" allowfullscreen src="https://umap.openstreetmap.fr/fr/map/eastern-crete_315002?scaleControl=true&miniMap=false&scrollWheelZoom=false&zoomControl=true&allowEdit=false&moreControl=true&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=null&onLoadPanel=undefined&captionBar=false&datalayers=832271&fullscreenControl=true&measureControl=false&editinosmControl=false">
+          </iframe>
       </div>
     </div>
   </div>

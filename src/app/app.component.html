@@ -3,25 +3,37 @@
     <app-nav></app-nav>
   </div>
   <div class="col-sm-1 pt-5 pl-2 pr-2" id="vertical-logo">
-    <img src="../assets/Skalaki_grec.png" alt="skalakigrec"/>
+    <img src="../assets/Skalaki_grec.png" alt="skalakigrec" />
   </div>
   <div class="col-sm-11 d-inline-block pr-1" id="outlet">
     <router-outlet></router-outlet>
   </div>
   <div id="scroller" (click)="scrollTo()">
-    <img src="../assets/scroll.png" alt="scroll"/>
+    <img src="../assets/scroll.png" alt="scroll" />
   </div>
 </div>
 
 <div style="text-align:center" class="main" *ngIf="!entered" resize>
   <img src="../assets/fond_accueil.jpg" class="pic" alt="background" id="bgrnd" />
   <div class="welcome">
+    <div id="lg">
+      <div id="flags">
+        <span>
+          <img src="../assets/fr_flag.png" (click)="setLanguage('fr')" alt="fr_flag" class="mr-2 flag flag-border"
+            [class.flag-border]="isCurrentLanguage('fr')" />
+        </span>
+        <span>
+          <img src="../assets/en_flag.png" (click)="setLanguage('en')" alt="en_flag" class="flag"
+            [class.flag-border]="isCurrentLanguage('en')" />
+        </span>
+      </div>
+    </div>
     <div class="welcome-button">
       <p class="m-0">Skalaki</p>
       <button type="button" class="btn btn-outline-light enter-button" (click)="onEnter()">Enter</button>
     </div>
     <div class="footer">
-      <p>Hébergement tout confort en Crète authentique</p>
+      <p>{{skalaki1}}</p>
     </div>
   </div>
 </div>

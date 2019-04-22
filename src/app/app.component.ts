@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, HostListener, AfterViewChecked } from
 import * as $ from 'jquery';
 import { Router, NavigationEnd } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -10,22 +11,35 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public entered: boolean;
+  public skalaki1: string;
+  public currentLang: string;
 
   img: JQuery<HTMLElement>;
 
   constructor(
     private router: Router,
-    translate: TranslateService
+    private translate: TranslateService,
+    private http: HttpClient
   ) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('fr');
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('fr');
+    translate.onLangChange.subscribe(event => {
+      this.afterOnInit();
+    });
   }
 
   ngOnInit(): void {
     $('#scroller').hide();
+  }
+
+  afterOnInit(){
+    this.currentLang = this.translate.currentLang;
+    this.http.get('../assets/translation/' + this.currentLang + '/skalaki1.txt', { responseType: 'text' as 'json'}).subscribe((data: string) => {
+      this.skalaki1 = data;
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -40,7 +54,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   ngAfterViewInit(): void {
-    console.log('afterInit');
     const outlet = $('#outlet');
     if (!this.entered) {
       $('#bgrnd').one('load', () => {
@@ -92,5 +105,13 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   public scrollTo() {
     $('#outlet').animate({ scrollTop: $('#outlet').scrollTop() + 300 }, 600);
+  }
+
+  setLanguage(lg: string) {
+    this.translate.use(lg);
+  }
+
+  isCurrentLanguage(lg: string): boolean{
+    return this.translate.currentLang === lg;
   }
 }
