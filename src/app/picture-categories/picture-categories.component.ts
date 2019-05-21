@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
+import { Category } from '../../models/category.model';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-picture-categories',
@@ -9,11 +11,18 @@ import * as $ from 'jquery';
 })
 export class PictureCategoriesComponent implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private categoryService: CategoryService  
+  ) {}
+  categories: Category[] = [];
 
   ngOnInit() {
     $('.active').removeClass('active');
     $('#pictures-nav').addClass('active');
+    this.categoryService.getCategories().subscribe(data => {
+      this.categories = data;
+    });
   }
 
 

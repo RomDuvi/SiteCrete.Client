@@ -1,0 +1,57 @@
+<div class="mt-2 col-md-12 main-container">
+  <div class="col-sm-12 col-md-8 m-auto">
+    <div class="text-center">
+      <img alt="availability" src="../../assets/icon_availability.png" id="availability-icon">
+      <div>
+        {{'Disponibilités' | translate}}
+      </div>
+    </div>
+    <p-fullCalendar #fc class="calendar" [events]="events" [options]="options"></p-fullCalendar>
+  </div>
+</div>
+
+<ng-template #editEventTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Event</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="editModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #reservationForm = "ngForm">
+      <div class="form-group col-sm-12">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" required id="reservationName" placeholder="Reservation Name" [(ngModel)]="reservationModel.name" name="reservationName" #reservationName="ngModel"/>
+        <div *ngIf="reservationName.invalid && (reservationName.dirty || reservationName.touched)" class="alert alert-danger">
+          Event Name is required
+        </div>
+      </div>
+      <div class="form-group col-sm-6">
+        <label for="name">Start Date</label>
+        <p-calendar type="text" dateFormat="dd.mm.yy" required id="reservationStartDate" placeholder="Reservation Start Date" [(ngModel)]="reservationModel.from" name="reservationStartDate" #reservationStartDate="ngModel"></p-calendar>
+        <div *ngIf="reservationStartDate.invalid && (reservationStartDate.dirty || reservationStartDate.touched)" class="alert alert-danger">
+          Event Start Date is required
+        </div>
+      </div>
+      <div class="form-group col-sm-6">
+        <label for="name">End Date</label>
+        <p-calendar type="text" dateFormat="dd.mm.yy" required id="reservationEndDate" placeholder="Reservation End Date" [(ngModel)]="reservationModel.to" name="reservationEndDate" #reservationEndDate="ngModel"></p-calendar>
+        <div *ngIf="reservationEndDate.invalid && (reservationEndDate.dirty || reservationEndDate.touched)" class="alert alert-danger">
+          Event End Date is required
+        </div>
+      </div>
+      <div class="form-group col-sm-6">
+        <label for="name">Reservation Type</label>
+        <select class="form-control" name="reservationType" id="reservationType" [(ngModel)]="reservationModel.type">
+          <option *ngFor="let key of reservationTypeKeys" [value]="key">{{reservationType[key]}}</option>
+        </select>
+        <div *ngIf="reservationType.invalid && (reservationType.dirty || reservationType.touched)" class="alert alert-danger">
+          Reservation type is required
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="editModalRef.hide()">Cancel</button>
+      <button *ngIf="!reservationModel.isNew" type="button" class="btn btn-danger pull-right ml-2" (click)="deleteReservation()">Delete</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!reservationForm.form.valid" (click)="saveReservation()">Submit</button>
+    </form>
+  </div>
+</ng-template>

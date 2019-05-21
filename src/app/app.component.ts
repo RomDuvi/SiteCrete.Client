@@ -1,17 +1,29 @@
-import { Component, OnInit, AfterViewInit, HostListener, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener, AfterViewChecked, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import { Router, NavigationEnd } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
+import { PictureService } from 'src/services/picture.service';
+import { CategoryService } from '../services/category.service';
+import { TextModel } from '../models/text.model';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { AuthService } from '../services/guard/auth.service';
+import { TextService } from '../services/text.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [PictureService, CategoryService]
 })
 export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  
+  isAdmin: boolean;
+  textModel: TextModel;
+  modalRef: BsModalRef;
+  
   public entered: boolean;
-  public skalaki1: string;
+  public skalaki1: TextModel;
   public currentLang: string;
 
   img: JQuery<HTMLElement>;
@@ -19,7 +31,9 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
   constructor(
     private router: Router,
     private translate: TranslateService,
-    private http: HttpClient
+    protected authService: AuthService,
+    private modalService: BsModalService,
+    private textService: TextService
   ) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('fr');
@@ -33,13 +47,19 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   ngOnInit(): void {
     $('#scroller').hide();
+    this.skalaki1 = new TextModel();
+    this.afterOnInit();
   }
 
-  afterOnInit(){
+  afterOnInit() {
     this.currentLang = this.translate.currentLang;
-    this.http.get('../assets/translation/' + this.currentLang + '/skalaki1.txt', { responseType: 'text' as 'json'}).subscribe((data: string) => {
-      this.skalaki1 = data;
-    });
+    this.textService.getText('skalaki1.txt', this.currentLang).subscribe(
+      data => {
+        this.skalaki1.textId = 'skalaki1.txt';
+        this.skalaki1.lang = this.currentLang;
+        this.skalaki1.text = data;
+      }
+    );
   }
 
   @HostListener('window:resize', ['$event'])
@@ -113,5 +133,27 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   isCurrentLanguage(lg: string): boolean{
     return this.translate.currentLang === lg;
+  }
+
+  updateText(text: TextModel, modalRef: TemplateRef<any>) {
+    if (!this.isAdmin) {
+      return;
+    }
+    this.textModel = new TextModel();
+    Object.assign(this.textModel, text);
+    this.modalRef = this.modalService.show(modalRef, {class: 'modal-lg'});
+  }
+
+  saveText() {
+    this.textService.saveText(this.textModel).subscribe(
+      data => {
+
+      },
+      err => console.log(err),
+      () => {
+        this.modalRef.hide();
+        this.ngOnInit();
+      }
+    );
   }
 }

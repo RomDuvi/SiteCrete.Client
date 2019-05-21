@@ -1,23 +1,23 @@
 <div class="mt-5 col-md-12 main-container">
   <div class="col-sm-12 col-md-8 m-auto">
     <div class="p-text col-md-12 p-0">
-      <p>
-        {{description1}}
+      <p (click)="updateText(description1, updateTextTemplate)">
+        {{description1.text}}
       </p>
     </div>
     <div class="col-md-12 p-0">
       <div class="p-picture col-sm-12 col-md-6">
         <img src="../../assets/villa.jpg" alt="villa" (click)="preview('../../assets/villa.jpg')">
       </div>
-      <div class="col-md-6 col-sm-12 p-text">
+      <div class="col-md-6 col-sm-12 p-text" (click)="updateText(description2, updateTextTemplate)">
         <p>
-          {{description2}}
+          {{description2.text}}
         </p>
       </div>
     </div>
     <div class="pt-4 col-md-12 p-0">
-      <div class="col-md-5 col-sm-12 pl-0 p-text">
-        {{description3}}
+      <div class="col-md-5 col-sm-12 pl-0 p-text" (click)="updateText(description3, updateTextTemplate)"> 
+        {{description3.text}}
       </div>
       <div class="col-md-7 col-sm-12 p-picture pr-0" id="plan">
         <img src="../../assets/plan_1.png" alt="plan" (click)="preview('../../assets/plan_1.png')" >
@@ -32,3 +32,25 @@
     </div>
   </div>
 </div>
+
+<ng-template #updateTextTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Event</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #textForm = "ngForm">
+      <div class="form-group col-sm-12">
+        <label for="text">Text</label>
+        <textarea rows="18" class="form-control" required id="text" [(ngModel)]="textModel.text" name="text" #text="ngModel"></textarea>
+        <div *ngIf="text.invalid && (text.dirty || text.touched)" class="alert alert-danger">
+          Text is required
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!textForm.form.valid" (click)="saveText()">Submit</button>
+    </form>
+  </div>
+</ng-template>

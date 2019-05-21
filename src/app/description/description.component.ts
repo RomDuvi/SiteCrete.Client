@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/guard/auth.service';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { TextService } from '../../services/text.service';
+import { TextModel } from '../../models/text.model';
 
 @Component({
   selector: 'app-description',
@@ -10,17 +14,23 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DescriptionComponent implements OnInit {
 
+  isAdmin: boolean;
+  textModel: TextModel;
+  modalRef: BsModalRef;
+
   public previewUrl: string;
   public isPreview: boolean;
-  public description1: string;
-  public description2: string;
-  public description3: string;
+  public description1: TextModel;
+  public description2: TextModel;
+  public description3: TextModel;
 
   public currentLang: string;
 
   constructor(
     private translate: TranslateService,
-    private http: HttpClient
+    protected authService: AuthService,
+    private modalService: BsModalService,
+    private textService: TextService
   ) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.afterInit();
@@ -30,20 +40,38 @@ export class DescriptionComponent implements OnInit {
   ngOnInit() {
     $('.active').removeClass('active');
     $('#description-nav').addClass('active');
+    this.isAdmin = this.authService.isAdminLogged();
+    this.description1 = new TextModel();
+    this.description2 = new TextModel();
+    this.description3 = new TextModel();
     this.afterInit();
   }
 
   afterInit() {
     this.currentLang = this.translate.currentLang;
-    this.http.get('../../assets/translation/' + this.currentLang + '/description1.txt', { responseType: 'text' as 'json'}).subscribe((data: string) => {
-      this.description1 = data;
-    });
-    this.http.get('../../assets/translation/' + this.currentLang + '/description2.txt', { responseType: 'text' as 'json'}).subscribe((data: string) => {
-      this.description2 = data;
-    });
-    this.http.get('../../assets/translation/' + this.currentLang + '/description3.txt', { responseType: 'text' as 'json'}).subscribe((data: string) => {
-      this.description3 = data;
-    });
+    this.textService.getText('description1.txt', this.currentLang).subscribe(
+      data => {
+        this.description1.textId = 'description1.txt';
+        this.description1.lang = this.currentLang;
+        this.description1.text = data;
+      }
+    );
+
+    this.textService.getText('description2.txt', this.currentLang).subscribe(
+      data => {
+        this.description2.textId = 'description2.txt';
+        this.description2.lang = this.currentLang;
+        this.description2.text = data;
+      }
+    );
+
+    this.textService.getText('description3.txt', this.currentLang).subscribe(
+      data => {
+        this.description3.textId = 'description3.txt';
+        this.description3.lang = this.currentLang;
+        this.description3.text = data;
+      }
+    );
   }
 
   preview(url: string) {
@@ -51,4 +79,25 @@ export class DescriptionComponent implements OnInit {
     this.isPreview = true;
   }
 
+  updateText(text: TextModel, modalRef: TemplateRef<any>) {
+    if (!this.isAdmin) {
+      return;
+    }
+    this.textModel = new TextModel();
+    Object.assign(this.textModel, text);
+    this.modalRef = this.modalService.show(modalRef, {class: 'modal-lg'});
+  }
+
+  saveText() {
+    this.textService.saveText(this.textModel).subscribe(
+      data => {
+
+      },
+      err => console.log(err),
+      () => {
+        this.modalRef.hide();
+        this.ngOnInit();
+      }
+    );
+  }
 }

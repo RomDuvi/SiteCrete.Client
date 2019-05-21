@@ -1,0 +1,22 @@
+<div class="mt-5 col-md-12 main-container">
+  <div class="col-sm-12 col-md-4 m-auto">
+    <h2>Login</h2>
+    <form #userForm="ngForm">
+      <div class="form-group">
+        <label for="userName">User Name</label>
+        <input type="text" class="form-control" required id="userName" [(ngModel)]="user.username" name="userName" #name="ngModel"/>
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+          User Name is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" required id="password" [(ngModel)]="user.password" name="password" #password="ngModel"/>
+        <div *ngIf="password.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+          Password is required
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="onSubmit()">Login</button>
+    </form>
+  </div>
+</div>

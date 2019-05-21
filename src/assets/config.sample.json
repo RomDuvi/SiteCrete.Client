@@ -1,0 +1,12 @@
+{
+    "baseUrl": "http://localhost:5000/api/",
+    "pictureUrl": "picture",
+    "userUrl": "user",
+    "categoryUrl": "category",
+    "reservationUrl": "reservation",
+    "textUrl": "text",
+    "entireVillaColor": "#5b9ce5",
+    "upstairsColor": "#b19ae5",
+    "downstairs1Color": "#dc9252",
+    "downstairs2Color": "#648c52"
+}

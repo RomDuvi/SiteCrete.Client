@@ -46,6 +46,9 @@
         <li class="nav-item">
             <a class="nav-link" [class.exp-a]="expanded" [routerLink]="['/contact']" id="contact-nav">{{'Contact'|translate}}</a>
         </li>
+        <li class="nav-item" *ngIf="isAdmin" >
+          <a class="nav-link" [class.exp-a]="expanded" id="logout" (click)="logout()" >Logout</a>
+        </li>
         <li class="nav-item" id="width-flags">
           <span>
             <img src="../../assets/fr_flag.png" (click)="setLanguage('fr')" alt="fr_flag" class="mr-2 flag flag-border" [class.flag-border]="isCurrentLanguage('fr')" />

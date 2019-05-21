@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../../services/guard/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -10,16 +11,19 @@ import { TranslateService } from '@ngx-translate/core';
 export class NavComponent implements OnInit {
 
   public expanded: boolean;
+  isAdmin: boolean;
 
   constructor(
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
 
   }
 
   ngOnInit() {
     this.expanded = $('.navbar-toggler').is(':visible');
+    this.isAdmin = this.authService.isAdminLogged();
     $('.nav-item').on('click', event => {
       if ( this.expanded ) {
         $('.navbar-collapse').removeClass('show');
@@ -42,5 +46,10 @@ export class NavComponent implements OnInit {
 
   isCurrentLanguage(lg: string): boolean{
     return this.translate.currentLang === lg;
+  }
+
+  logout(){
+    this.authService.logout();
+    this.ngOnInit();
   }
 }

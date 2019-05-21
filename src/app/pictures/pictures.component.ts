@@ -1,7 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryOrder, NgxGalleryAction, NgxGalleryAnimation } from 'ngx-gallery';
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryOrder, INgxGalleryImage } from 'ngx-gallery';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as $ from 'jquery';
+import { Picture } from '../../models/picture.model';
+import { CategoryService } from '../../services/category.service';
+import { PictureService } from 'src/services/picture.service';
+import { Category } from 'src/models/category.model';
+import { ToastrService, Toast } from 'ngx-toastr';
+import { AuthService } from '../../services/guard/auth.service';
+import { PicturesCategories } from 'src/models/picturesCategories.model';
 
 @Component({
   selector: 'app-pictures',
@@ -9,151 +17,175 @@ import * as $ from 'jquery';
   styleUrls: ['./pictures.component.css']
 })
 export class PicturesComponent implements OnInit {
+  isAdmin: boolean;
+
+  public editModalRef: BsModalRef;
+  public pictureModel: Picture;
+  public loading: string;
+
+  categories: Category[];
+  pictures: Picture[];
 
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[] = [];
 
-  private pictures = {
-    villa : {
-      path: '../../assets/Villa/',
-      extension: '.jpg',
-      pics: [
-        '01 piscine 5',
-        '02 terrasse sud 5',
-        '03 villa face ouest 2',
-        '04 piscine 6',
-        '05 patio 2',
-        '06 BBQ',
-        '07 piscine 3',
-        '08 piscine',
-        '09 piscine 2',
-        '10 piscine 4',
-        '11 chambre bas 2',
-        '12 chambre bas',
-        '13 terrasse ouest',
-        '14 patio',
-        '15 terrasse sud 2',
-        '16 terrasse sud 4',
-        '17 terrasse sud',
-        '18 terrasse sud 3',
-        '19 cuisine haut',
-        '20 chambre haut',
-        '21 chambre haut 2',
-        '22 villa face nord-ouest',
-        '23 villa face ouest 1',
-        '24 villa face ouest 3',
-        '25 villa face sud-ouest',
-        '26 villa face sud',
-        '27 villa face est',
-        '28 vue 1',
-        '29 vue 3',
-        '30 vue 2']
-    },
-    environs : {
-      path: '../../assets/Alentours/',
-      extension: '.jpg',
-      pics: [
-        '01 situation',
-        '02 situation',
-        '03 descente vers Mochlos',
-        '04 Mochlos',
-        '05 Mochlos',
-        '06 Mochlos',
-        '07 site archeologique',
-        '08 Sfaka',
-        '09 gorge Richtis',
-        '10 gorge Richtis',
-        '11 baie de Tholos',
-        '12 falaises',
-        '13 Gorge Kavousi',
-        '14 Gorge Kavousi',
-        '15 vautours',
-        '16 Tholos beach',
-        '17 baie de Tholos',
-        '18 Tourloti',
-        '19 Lastros',
-        '20 falaises'
-      ]
-    },
-    east : {
-      path: '../../assets/Crete_Est/',
-      extension: '.jpg',
-      pics: [
-        '01 Monastere de Toplou',
-        '02 Monastere de Toplou',
-        '03 Monastere de Toplou',
-        '04 gorge des morts',
-        '05 Agios Nikolaos',
-        '06 Agios Nikolaos',
-        '07 mont Thripti',
-        '08 mont Thripti',
-        '09 Sitia',
-        '10 gorge de Pefki',
-        '11 Spinalonga',
-        '12 Spinalonga',
-        '13 Plateau de Lassithi',
-        '14 Plateau de Lassithi',
-        '15 Xerokampos',
-        '16 Xerokampos'
-      ]
-    }
-  };
+  dropdownCategories: Category[];
+  dropdownSettings: any;
 
-  constructor(private route: ActivatedRoute) {  }
+  constructor(
+    private route: ActivatedRoute,
+    protected pictureService: PictureService,
+    private categoryService: CategoryService,
+    private toastr: ToastrService,
+    private modalService: BsModalService,
+    private authService: AuthService,
+    private cd: ChangeDetectorRef,
+  ) {
+
+  }
 
   ngOnInit() {
     $('.active').removeClass('active');
     $('#pictures-nav').addClass('active');
-    const cat = this.pictures[this.route.snapshot.params.id];
-    cat.pics.forEach((element: string) => {
-      //remove number and add uppercase
-      let name = element.replace(/[0-9]/g, '');
-      name = this.removeEmptyChars(name);
-      const nameUppercase = name.charAt(0).toUpperCase() + name.slice(1);
-      this.galleryImages.push(
-        {
-          small: cat.path + element + '-' + cat.extension,
-          medium: cat.path + element + cat.extension,
-          big: cat.path + element + cat.extension,
-          description: `${nameUppercase}<br/>${cat.pics.indexOf(element) + 1} / ${cat.pics.length}`
-        }
-      );
+    this.isAdmin = this.authService.isAdminLogged();
+    const cat = this.route.snapshot.params.id;
+
+    this.categoryService.getCategories().subscribe(data => {
+      this.categories = data;
+      this.dropdownCategories = data;
+      this.dropdownSettings = {
+        singleSelection: false,
+        idField: 'id',
+        textField: 'name',
+        selectAllText: 'Select All',
+        unSelectAllText: 'UnSelect All',
+        itemsShowLimit: 5,
+        allowSearchFilter: true
+      };
     });
 
-    this.galleryOptions = [
-      {
-          width: '100%',
-          height: Math.ceil(this.galleryImages.length / 6) * 15 + '%',
-          thumbnailsColumns: 6,
-          thumbnailsRows:  Math.ceil(this.galleryImages.length / 6),
-          thumbnailsPercent: 100,
-          image: false,
-          lazyLoading: true,
-          thumbnailsOrder: NgxGalleryOrder.Row,
-          previewKeyboardNavigation: true
-      },
-      // max-width 800
-      {
-          breakpoint: 800,
-          height: Math.ceil(this.galleryImages.length / 4) * 15 + '%',
-          thumbnailsColumns: 4,
-          thumbnailsRows:  Math.ceil(this.galleryImages.length / 4),
-      },
-      // max-width 400
-      {
-          breakpoint: 400,
-          height: Math.ceil(this.galleryImages.length / 2) * 15 + '%',
-          thumbnailsColumns: 2,
-          thumbnailsPercent: 10,
-          thumbnailsRows:  Math.ceil(this.galleryImages.length / 2),
-      }
-    ];
+    this.pictureService.getPicturesByCategory(cat).subscribe(data => {
+      this.pictures = data;
+      console.log(this.pictures.length);
+      this.galleryOptions = [
+        {
+            width: '100%',
+            height: Math.ceil(this.pictures.length / 6) * 15 + '%',
+            thumbnailsColumns: 6,
+            thumbnailsRows:  Math.ceil(this.pictures.length / 6),
+            thumbnailsPercent: 100,
+            image: false,
+            // lazyLoading: true,
+            thumbnailsOrder: NgxGalleryOrder.Row,
+            previewKeyboardNavigation: true
+        },
+        // max-width 800
+        {
+            breakpoint: 800,
+            height: Math.ceil(this.pictures.length / 4) * 15 + '%',
+            thumbnailsColumns: 4,
+            thumbnailsRows:  Math.ceil(this.pictures.length / 4),
+        },
+        // max-width 400
+        {
+            breakpoint: 400,
+            height: Math.ceil(this.pictures.length / 2) * 15 + '%',
+            thumbnailsColumns: 2,
+            thumbnailsPercent: 10,
+            thumbnailsRows:  Math.ceil(this.pictures.length / 2),
+        }
+      ];
+      console.log(this.galleryOptions);
+      this.pictures.forEach(picture => {
+        this.pictureService.getPictureFile(picture.id).subscribe((bytes: any) => {
+          const path = `data:${picture.type};base64,${bytes}`;
+          let img: INgxGalleryImage = {};
+          img.big = path;
+          img.description = picture.description;
+          img.label = picture.displayName;
+          img.medium = path;
+          img.small = path;
+          this.galleryImages.push(img);
+        });
+      });
+    });
   }
 
-  removeEmptyChars(s: string): string {
-    while (s.charAt(0).match(/\s+/g)) {
-      s = s.slice(1);
+  addPictureModal(modal: TemplateRef<any>) {
+    this.pictureModel = new Picture();
+    this.pictureModel.pictureCategories = [];
+    this.editModalRef = this.modalService.show(modal);
+  }
+
+  addPicture() {
+    if (!this.pictureModel.id) {
+      this.pictureService.addPicture(this.pictureModel, progress => {
+        this.loading = progress;
+      }).subscribe(data => {
+        this.toastr.success(`Picture ${this.pictureModel.displayName} created!`);
+        this.ngOnInit();
+      }, err => this.toastr.error(err), () => this.editModalRef.hide());
+    } else {
+      this.pictureService.updatePicture(this.pictureModel).subscribe(
+      data => {
+        this.toastr.success(`Picture ${this.pictureModel.displayName} updated!`);
+        this.ngOnInit();
+      }, err => this.toastr.error(err), () => this.editModalRef.hide());
     }
-    return s;
+  }
+
+  onFileChange(event) {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsBinaryString(file);
+      reader.onload = () => {
+        this.pictureModel.file = <File>file;
+        // need to run CD since file load runs outside of zone
+        this.cd.markForCheck();
+      };
+    }
+  }
+
+  onCategorySelect(item: Category) {
+    const pCat = new PicturesCategories();
+    pCat.categoryId = item.id;
+    pCat.pictureId = '00000000-0000-0000-0000-000000000000';
+    this.pictureModel.pictureCategories.push(pCat);
+  }
+
+  onCategoryDeselect(item: Category) {
+    const pCat = new PicturesCategories();
+    pCat.categoryId = item.id;
+    pCat.pictureId = '00000000-0000-0000-0000-000000000000';
+    const index = this.pictureModel.pictureCategories.indexOf(pCat);
+    this.pictureModel.pictureCategories.splice(index, 1);
+  }
+
+  onSelectAll(items: Category[]) {
+    items.forEach(cat => {
+      this.onCategorySelect(cat);
+    });
+  }
+
+  onDeSelectAll(items: Category[]) {
+    this.pictureModel.pictureCategories = [];
+  }
+
+  deletePicture(picture: Picture) {
+    this.pictureService.deletePicture(picture).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => this.toastr.error(err),
+      () => this.ngOnInit());
+  }
+
+  editPicture(modal: TemplateRef<any>, picture: Picture) {
+    this.pictureModel = new Picture();
+    Object.assign(this.pictureModel, picture);
+    this.pictureModel.file = null;
+    this.editModalRef = this.modalService.show(modal);
   }
 }

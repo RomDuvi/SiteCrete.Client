@@ -1,3 +1,10 @@
+@import url('../node_modules/primeicons/primeicons.css');
+@import url('../node_modules/primeng/resources/themes/nova-light/theme.css');
+@import url('../node_modules/primeng/resources/primeng.min.css');
+@import url('../node_modules/@fullcalendar/core/main.min.css');
+@import url('../node_modules/@fullcalendar/daygrid/main.min.css');
+@import url('../node_modules/@fullcalendar/list/main.min.css');
+
 @font-face {
     font-family: 'Borealis';
     src: url('assets/font/Borea___.ttf')  format('truetype');
@@ -26,4 +33,20 @@
 html{
     height: 100%;
     overflow-y: hidden;
+}
+
+.modal-content {
+    top: 64px;
+}
+
+.fc-body, .fc-list-table{
+    background-color: white !important;
+}
+
+.fc-event-container {
+    color: white;
+}
+
+body .ui-datepicker:not(.ui-datepicker-inline) {
+    top: 35px !important;
 }
