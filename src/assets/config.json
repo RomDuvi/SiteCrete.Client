@@ -4,9 +4,11 @@
     "userUrl": "user",
     "categoryUrl": "category",
     "reservationUrl": "reservation",
+    "discoverUrl": "discover",
+    "linkUrl": "link",
     "textUrl": "text",
+    "goldenCommentUrl": "book",
     "entireVillaColor": "#5b9ce5",
     "upstairsColor": "#b19ae5",
-    "downstairs1Color": "#dc9252",
-    "downstairs2Color": "#648c52"
+    "downstairsColor": "#dc9252"
 }

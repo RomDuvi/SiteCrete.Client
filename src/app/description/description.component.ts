@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import * as $ from 'jquery';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { AuthService } from '../../services/guard/auth.service';
@@ -6,17 +6,21 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { TextService } from '../../services/text.service';
 import { TextModel } from '../../models/text.model';
+import { Subject, interval } from 'rxjs';
+import { takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-description',
   templateUrl: './description.component.html',
   styleUrls: ['./description.component.css']
 })
-export class DescriptionComponent implements OnInit {
+export class DescriptionComponent implements OnInit, OnDestroy {
 
   isAdmin: boolean;
   textModel: TextModel;
   modalRef: BsModalRef;
+  currentDiaporama: number;
+  currentDiaporamaFile: string;
 
   public previewUrl: string;
   public isPreview: boolean;
@@ -25,6 +29,13 @@ export class DescriptionComponent implements OnInit {
   public description3: TextModel;
 
   public currentLang: string;
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
+  public diaporamaFiles = [
+    '../../assets/villa.jpg',
+    '../../assets/piscine.jpg'
+  ];
 
   constructor(
     private translate: TranslateService,
@@ -44,6 +55,7 @@ export class DescriptionComponent implements OnInit {
     this.description1 = new TextModel();
     this.description2 = new TextModel();
     this.description3 = new TextModel();
+    this.currentDiaporama = 0;
     this.afterInit();
   }
 
@@ -70,6 +82,15 @@ export class DescriptionComponent implements OnInit {
         this.description3.textId = 'description3.txt';
         this.description3.lang = this.currentLang;
         this.description3.text = data;
+      }
+    );
+
+    const source = interval(2000);
+    const example = source.pipe(takeUntil(this.destroy$));
+    example.subscribe(
+      val => {
+        this.currentDiaporama ++;
+        this.currentDiaporamaFile = this.diaporamaFiles[this.currentDiaporama % 2];
       }
     );
   }
@@ -99,5 +120,11 @@ export class DescriptionComponent implements OnInit {
         this.ngOnInit();
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    // Now let's also unsubscribe from the subject itself:
+    this.destroy$.unsubscribe();
   }
 }

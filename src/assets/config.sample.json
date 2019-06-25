@@ -4,6 +4,7 @@
     "userUrl": "user",
     "categoryUrl": "category",
     "reservationUrl": "reservation",
+    "discoverUrl": "discover",
     "textUrl": "text",
     "entireVillaColor": "#5b9ce5",
     "upstairsColor": "#b19ae5",

@@ -1,12 +1,53 @@
-<div class="mt-2 col-md-12 main-container">
+<div class="mt-3 col-md-12 main-container">
   <div class="col-sm-12 col-md-8 m-auto">
-    <div class="text-center">
+    <div class="text-center mb-2">
       <img alt="availability" src="../../assets/icon_availability.png" id="availability-icon">
-      <div>
+      <div class="font-weight-bolder">
         {{'Disponibilités' | translate}}
       </div>
     </div>
-    <p-fullCalendar #fc class="calendar" [events]="events" [options]="options"></p-fullCalendar>
+    <div class="cold-sm-12 mt-5">
+      <div class="d-inline-block">
+        <div class="d-inline-block" class="legend-name">
+          {{'Libre' | translate}}
+        </div>
+        <div class="d-inline-block">
+          <div [style.background-color]="'#ffffff'" class="legend-color d-inline-block">
+          </div>
+        </div>
+      </div>
+      <div class="d-inline-block" *ngFor="let legend of legends" class="legend">
+        <div class="d-inline-block" class="legend-name">
+          {{legend.name}}
+        </div>
+        <div class="d-inline-block">
+          <div *ngFor="let color of legend.colors" [style.background-color]="color" class="legend-color color-rounded d-inline-block">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="month-selector text-right">
+      <select id="month-selector" [(ngModel)]="selectedMonth" (change)="onMonthSelect()" class="mr-2">
+        <option value="0">{{'Janvier' | translate}}</option>
+        <option value="1">{{'Février' | translate}}</option>
+        <option value="2">{{'Mars' | translate}}</option>
+        <option value="3">{{'Avril' | translate}}</option>
+        <option value="4">{{'Mai' | translate}}</option>
+        <option value="5">{{'Juin' | translate}}</option>
+        <option value="6">{{'Juillet' | translate}}</option>
+        <option value="7">{{'Août' | translate}}</option>
+        <option value="8">{{'Septembre' | translate}}</option>
+        <option value="9">{{'Octobre' | translate}}</option>
+        <option value="10">{{'Novembre' | translate}}</option>
+        <option value="11">{{'Décembre' | translate}}</option>
+      </select>
+      <select id="year-selector" [(ngModel)]="selectedYear" (change)="onMonthSelect()">
+        <option *ngFor="let year of nextFiveYears" [value]='year'>
+          {{year}}
+        </option>
+      </select>
+    </div>
+    <p-fullCalendar #fc class="calendar" [events]="events" [options]="options" class="mt-5"></p-fullCalendar>
   </div>
 </div>
 
@@ -18,25 +59,33 @@
     </button>
   </div>
   <div class="modal-body">
-    <form #reservationForm = "ngForm">
+    <form #reservationForm="ngForm">
       <div class="form-group col-sm-12">
         <label for="name">Name</label>
-        <input type="text" class="form-control" required id="reservationName" placeholder="Reservation Name" [(ngModel)]="reservationModel.name" name="reservationName" #reservationName="ngModel"/>
-        <div *ngIf="reservationName.invalid && (reservationName.dirty || reservationName.touched)" class="alert alert-danger">
+        <input type="text" class="form-control" required id="reservationName" placeholder="Reservation Name"
+          [(ngModel)]="reservationModel.name" name="reservationName" #reservationName="ngModel" />
+        <div *ngIf="reservationName.invalid && (reservationName.dirty || reservationName.touched)"
+          class="alert alert-danger">
           Event Name is required
         </div>
       </div>
       <div class="form-group col-sm-6">
         <label for="name">Start Date</label>
-        <p-calendar type="text" dateFormat="dd.mm.yy" required id="reservationStartDate" placeholder="Reservation Start Date" [(ngModel)]="reservationModel.from" name="reservationStartDate" #reservationStartDate="ngModel"></p-calendar>
-        <div *ngIf="reservationStartDate.invalid && (reservationStartDate.dirty || reservationStartDate.touched)" class="alert alert-danger">
+        <p-calendar type="text" dateFormat="dd.mm.yy" required id="reservationStartDate"
+          placeholder="Reservation Start Date" [(ngModel)]="reservationModel.from" name="reservationStartDate"
+          #reservationStartDate="ngModel"></p-calendar>
+        <div *ngIf="reservationStartDate.invalid && (reservationStartDate.dirty || reservationStartDate.touched)"
+          class="alert alert-danger">
           Event Start Date is required
         </div>
       </div>
       <div class="form-group col-sm-6">
         <label for="name">End Date</label>
-        <p-calendar type="text" dateFormat="dd.mm.yy" required id="reservationEndDate" placeholder="Reservation End Date" [(ngModel)]="reservationModel.to" name="reservationEndDate" #reservationEndDate="ngModel"></p-calendar>
-        <div *ngIf="reservationEndDate.invalid && (reservationEndDate.dirty || reservationEndDate.touched)" class="alert alert-danger">
+        <p-calendar type="text" dateFormat="dd.mm.yy" required id="reservationEndDate"
+          placeholder="Reservation End Date" [(ngModel)]="reservationModel.to" name="reservationEndDate"
+          #reservationEndDate="ngModel"></p-calendar>
+        <div *ngIf="reservationEndDate.invalid && (reservationEndDate.dirty || reservationEndDate.touched)"
+          class="alert alert-danger">
           Event End Date is required
         </div>
       </div>
@@ -45,13 +94,16 @@
         <select class="form-control" name="reservationType" id="reservationType" [(ngModel)]="reservationModel.type">
           <option *ngFor="let key of reservationTypeKeys" [value]="key">{{reservationType[key]}}</option>
         </select>
-        <div *ngIf="reservationType.invalid && (reservationType.dirty || reservationType.touched)" class="alert alert-danger">
+        <div *ngIf="reservationType.invalid && (reservationType.dirty || reservationType.touched)"
+          class="alert alert-danger">
           Reservation type is required
         </div>
       </div>
       <button type="button" class="btn btn-primary" (click)="editModalRef.hide()">Cancel</button>
-      <button *ngIf="!reservationModel.isNew" type="button" class="btn btn-danger pull-right ml-2" (click)="deleteReservation()">Delete</button>
-      <button type="button" class="btn btn-success pull-right" [disabled]="!reservationForm.form.valid" (click)="saveReservation()">Submit</button>
+      <button *ngIf="!reservationModel.isNew" type="button" class="btn btn-danger pull-right ml-2"
+        (click)="deleteReservation()">Delete</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!reservationForm.form.valid"
+        (click)="saveReservation()">Submit</button>
     </form>
   </div>
 </ng-template>

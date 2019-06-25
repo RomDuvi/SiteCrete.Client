@@ -5,3 +5,24 @@
 .picture img {
     max-width: 250px;
 }
+
+.categories {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.categories .cat-nav {
+    display: inline;
+    padding: 7px 9px 7px 9px;
+    color: rgba(91, 156, 229);
+    border: 2px solid rgba(91, 156, 229);
+    border-radius: 12px;
+    margin-right: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.selected-nav {
+    color: white !important;
+    background-color: rgba(91, 156, 229);
+}

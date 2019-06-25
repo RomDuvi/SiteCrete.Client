@@ -2,14 +2,22 @@
   <div class="col-sm-12 col-md-10 m-auto">
     <div class="text-center" id="title">
       <img src="../../assets/icon_photo.png" alt="euro">
-      <div>
+      <div class="font-weight-bolder">
         {{'PHOTOS' | translate}}
       </div>
     </div>
-    <div id="categories">
-      <div *ngFor="let cat of categories" class="category col-md-2 col-sm-12" (click)="navigate(cat.id)">
-        <p>{{cat.name}}</p>
-        <!-- IMG PATH -->
+    <div id="categories" class="mt-5">
+      <div class="category col-md-2 col-sm-12" (click)="navigate('40000000-0000-0000-0000-000000000001')">
+        <p>{{'Villa Skalaki' | translate}}</p>
+        <img src="../../assets/villa_skalaki.jpg" alt="villa">
+      </div>
+      <div class="category col-md-2 col-sm-12" (click)="navigate('40000000-0000-0000-0000-000000000002')">
+        <p>{{'Alentours' | translate}}</p>
+        <img src="../../assets/alentours.jpg" alt="alentours">
+      </div>
+      <div class="category col-md-2 col-sm-12" (click)="navigate('40000000-0000-0000-0000-000000000003')">
+        <p>{{"Crète de l'Est" | translate}}</p>
+        <img src="../../assets/crete_est.jpg" alt="east">
       </div>
     </div>
   </div>

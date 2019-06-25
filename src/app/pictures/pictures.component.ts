@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef  } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryOrder, INgxGalleryImage } from 'ngx-gallery';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as $ from 'jquery';
@@ -10,6 +10,7 @@ import { Category } from 'src/models/category.model';
 import { ToastrService, Toast } from 'ngx-toastr';
 import { AuthService } from '../../services/guard/auth.service';
 import { PicturesCategories } from 'src/models/picturesCategories.model';
+import { ConfirmationDialogService } from '../utils/confirmation/ConfirmationDialog.service';
 
 @Component({
   selector: 'app-pictures',
@@ -21,8 +22,9 @@ export class PicturesComponent implements OnInit {
 
   public editModalRef: BsModalRef;
   public pictureModel: Picture;
-  public loading: string;
+  public loading: number;
 
+  currentCategory: string;
   categories: Category[];
   pictures: Picture[];
 
@@ -32,6 +34,14 @@ export class PicturesComponent implements OnInit {
   dropdownCategories: Category[];
   dropdownSettings: any;
 
+  thumbs: string[] = [];
+
+  cols = [
+    { field: 'order', header: 'Order' },
+    { field: 'displayName', header: 'Display Name' },
+    { field: 'description', header: 'Description' }
+  ];
+
   constructor(
     private route: ActivatedRoute,
     protected pictureService: PictureService,
@@ -40,6 +50,8 @@ export class PicturesComponent implements OnInit {
     private modalService: BsModalService,
     private authService: AuthService,
     private cd: ChangeDetectorRef,
+    private confirmationService: ConfirmationDialogService,
+    private router: Router
   ) {
 
   }
@@ -47,8 +59,13 @@ export class PicturesComponent implements OnInit {
   ngOnInit() {
     $('.active').removeClass('active');
     $('#pictures-nav').addClass('active');
+
+    this.currentCategory = '';
     this.isAdmin = this.authService.isAdminLogged();
     const cat = this.route.snapshot.params.id;
+    this.currentCategory = cat;
+    this.pictures = [];
+    this.galleryImages = [];
 
     this.categoryService.getCategories().subscribe(data => {
       this.categories = data;
@@ -65,8 +82,10 @@ export class PicturesComponent implements OnInit {
     });
 
     this.pictureService.getPicturesByCategory(cat).subscribe(data => {
-      this.pictures = data;
-      console.log(this.pictures.length);
+      this.pictures = data.sort((a, b) => {
+        return a.order - b.order;
+      });
+
       this.galleryOptions = [
         {
             width: '100%',
@@ -75,7 +94,7 @@ export class PicturesComponent implements OnInit {
             thumbnailsRows:  Math.ceil(this.pictures.length / 6),
             thumbnailsPercent: 100,
             image: false,
-            // lazyLoading: true,
+            lazyLoading: true,
             thumbnailsOrder: NgxGalleryOrder.Row,
             previewKeyboardNavigation: true
         },
@@ -95,20 +114,78 @@ export class PicturesComponent implements OnInit {
             thumbnailsRows:  Math.ceil(this.pictures.length / 2),
         }
       ];
-      console.log(this.galleryOptions);
-      this.pictures.forEach(picture => {
-        this.pictureService.getPictureFile(picture.id).subscribe((bytes: any) => {
-          const path = `data:${picture.type};base64,${bytes}`;
-          let img: INgxGalleryImage = {};
-          img.big = path;
-          img.description = picture.description;
-          img.label = picture.displayName;
-          img.medium = path;
-          img.small = path;
+      this.pictures.forEach((picture, i) => {
+        let img: INgxGalleryImage = {};
+        img.description = picture.displayName + '<br/>' + (i + 1) + '/' + this.pictures.length;
+        img.label = picture.displayName;
+        img.small = '../../assets/spinner.svg';
+        img.big = '../../assets/spinner.svg';
+        this.galleryImages.push(img);
+
+        this.pictureService.getThumbFile(picture.id).subscribe((bytes:any) => {
+          const thumbPath = `data:${picture.type};base64,${bytes}`;
+          picture.thumbSrc = thumbPath;
+          img.small = thumbPath;
+          const newThumbs = this.galleryImages.slice(0, this.galleryImages.length);
           this.galleryImages.push(img);
+          this.galleryImages = newThumbs;
+          this.pictureService.getPictureFile(picture.id).subscribe((bytes: any) => {
+            const path = `data:${picture.type};base64,${bytes}`;
+            img.big = path;
+            img.medium = path;
+            const newImages = this.galleryImages.slice(0, this.galleryImages.length);
+            this.galleryImages = newImages;
+          });
         });
       });
     });
+  }
+
+  onRowReorder(event): void {
+    const oldOrder = event.dragIndex;
+    const newOrder = event.dropIndex !== 0 ? event.dropIndex - 1 : 0;
+    const movedPic = this.pictures.find(p => p.order === oldOrder);
+    let updatePics: Picture[];
+
+    if (oldOrder > newOrder) {
+      updatePics = this.pictures.filter(p => p.order >= newOrder + 1 && p.order <= oldOrder);
+      updatePics.forEach(pic => {
+        if (pic.id === movedPic.id) {
+          return;
+        }
+        if (pic.order !== this.pictures.length - 1) {
+          pic.order++;
+        }
+        this.pictureService.updatePicture(pic).subscribe(
+          data => console.log(data),
+          err => console.log(err),
+          () => console.log('picture updated')
+        );
+      });
+      movedPic.order = newOrder + 1;
+    } else if (oldOrder < newOrder) {
+      updatePics = this.pictures.filter(p => p.order <= newOrder && p.order >= oldOrder);
+      updatePics.forEach(pic => {
+        if (pic.id === movedPic.id) {
+          return;
+        }
+        if (pic.order !== 0) {
+          pic.order--;
+        }
+
+        this.pictureService.updatePicture(pic).subscribe(
+          data => console.log(data),
+          err => console.log(err),
+          () => console.log('picture updated')
+        );
+      });
+      movedPic.order = newOrder;
+    }
+    this.pictureService.updatePicture(movedPic).subscribe(
+      data => console.log(data),
+      err => console.log(err),
+      () => console.log('picture updated')
+    );
   }
 
   addPictureModal(modal: TemplateRef<any>) {
@@ -124,7 +201,11 @@ export class PicturesComponent implements OnInit {
       }).subscribe(data => {
         this.toastr.success(`Picture ${this.pictureModel.displayName} created!`);
         this.ngOnInit();
-      }, err => this.toastr.error(err), () => this.editModalRef.hide());
+      }, err => this.toastr.error(err),
+      () => {
+        this.editModalRef.hide();
+        this.loading = 0;
+      });
     } else {
       this.pictureService.updatePicture(this.pictureModel).subscribe(
       data => {
@@ -174,12 +255,18 @@ export class PicturesComponent implements OnInit {
   }
 
   deletePicture(picture: Picture) {
-    this.pictureService.deletePicture(picture).subscribe(
-      data => {
-        console.log(data);
-      },
-      err => this.toastr.error(err),
-      () => this.ngOnInit());
+    this.confirmationService.confirm('Are you sure?').subscribe(
+      result => {
+        if (result) {
+          this.pictureService.deletePicture(picture).subscribe(
+            data => {
+              console.log(data);
+            },
+            err => this.toastr.error(err),
+            () => this.ngOnInit());
+        }
+      }
+    );
   }
 
   editPicture(modal: TemplateRef<any>, picture: Picture) {
@@ -187,5 +274,15 @@ export class PicturesComponent implements OnInit {
     Object.assign(this.pictureModel, picture);
     this.pictureModel.file = null;
     this.editModalRef = this.modalService.show(modal);
+  }
+
+  getThumb(order: number) {
+    return this.pictures.find(p => p.order === order).thumbSrc;
+  }
+
+  switchCategory(id: string) {
+    this.router.navigate([`/pictures/${id}`], { replaceUrl: true }).then(
+      () => this.ngOnInit()
+    );
   }
 }

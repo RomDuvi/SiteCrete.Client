@@ -33,6 +33,7 @@ export class EquipmentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAdmin = this.authService.isAdminLogged();
     $('.active').removeClass('active');
     $('#equipment-nav').addClass('active');
     this.equipment1 = new TextModel();

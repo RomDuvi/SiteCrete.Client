@@ -8,11 +8,18 @@ export class Reservation extends BaseModel {
     isNew: boolean;
 }
 
+export class ReservationModel extends BaseModel {
+    name: string;
+    from: string;
+    to: string;
+    type: ReservationType;
+    isNew: boolean;
+}
+
 export enum ReservationType {
     EntireVilla = 0,
     Upstairs = 1,
-    Downstairs1 = 2,
-    Downstairs2 = 3
+    Downstairs = 2
 }
 
 export class SelectedDate {

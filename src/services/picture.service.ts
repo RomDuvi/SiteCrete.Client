@@ -23,9 +23,9 @@ export class PictureService extends ConfigService {
 
         const req = new HttpRequest('POST', this.apiUrl, formData, { reportProgress: true});
         return this.http.request(req).pipe(
-            map(event => this.getEventMessage(event, picture.displayName)),
+            map(event => this.getEventMessage(event, picture)),
             tap(message => progressCallback(message)),
-            last(progressCallback('Picture saved'))
+            last(progressCallback('Picture saved')),
           );
     }
 
@@ -34,7 +34,11 @@ export class PictureService extends ConfigService {
     }
 
     getPictureFile(pictureId: string): Observable<any> {
-        return this.http.get<Picture>(this.apiUrl + '/file/' + pictureId, this.httpOptions);
+        return this.http.get<any>(this.apiUrl + '/file/' + pictureId, this.httpOptions);
+    }
+
+    getThumbFile(pictureId: string): Observable<any> {
+      return this.http.get<any>(this.apiUrl + '/thumb/' + pictureId, this.httpOptions);
     }
 
     getPicturesByCategory(categoryId: string): Observable<Picture[]> {
@@ -49,10 +53,14 @@ export class PictureService extends ConfigService {
         return this.http.put<Picture>(this.apiUrl, picture, this.httpOptions);
     }
 
-    private getEventMessage(event: HttpEvent<any>, fileName: string): any {
+    getPicturesForDiscover(discoverId: string): Observable<Picture[]> {
+      return this.http.get<Picture[]>(this.apiUrl + '/discover/' + discoverId, this.httpOptions);
+    }
+
+    private getEventMessage(event: HttpEvent<any>, picture: Picture): any {
         switch (event.type) {
           case HttpEventType.Sent:
-            return `Uploading "${fileName}"`;
+            return 0;
 
           case HttpEventType.UploadProgress:
             // Compute and show the % done:
@@ -60,10 +68,10 @@ export class PictureService extends ConfigService {
             return percentDone;
 
           case HttpEventType.Response:
-            return `"${fileName}" was completely uploaded!`;
+            return event.body;
 
           default:
-            return `"${fileName}" surprising upload event: ${event.type}.`;
+            return 0;
         }
       }
 }

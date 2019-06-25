@@ -3,3 +3,28 @@
     font-family: 'Candara';
     font-size: 1.2em; 
 }
+
+img {
+    max-height: 50px;
+}
+
+.legend {
+    display: inline-block;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    border: 1px solid rgb(41, 41, 41);
+}
+
+.color-rounded {
+    border: none;
+    border-radius: 25px;
+}
+
+.legend-name {
+    margin-right: 5px;
+    display: inline-block;
+}

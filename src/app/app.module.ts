@@ -11,6 +11,11 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FullCalendarModule } from 'primeng/fullcalendar';
 import { CalendarModule } from 'primeng/calendar';
+import { TableModule } from 'primeng/table';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { RatingModule } from 'primeng/rating';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -31,9 +36,13 @@ import { CustomHttpInterceptor } from 'src/services/error/http.interceptor';
 import { LoginComponent } from './login/login.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { ConfigService } from '../services/config/config.service';
-import { ConfirmationDialogComponent } from '../utils/confirmation/confirmation-dialog.component';
-import { ConfirmationDialogService } from '../utils/confirmation/ConfirmationDialog.service';
+import { ConfirmationDialogComponent } from './utils/confirmation/confirmation-dialog.component';
+import { ConfirmationDialogService } from './utils/confirmation/ConfirmationDialog.service';
 import { TextService } from '../services/text.service';
+import { AddressesComponent } from './addresses/addresses.component';
+import { LinksComponent } from './links/links.component';
+import { NewsComponent } from './news/news.component';
+import { GoldenBookComponent } from './golden-book/golden-book.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/description', pathMatch: 'full'},
@@ -41,14 +50,14 @@ const appRoutes: Routes = [
   {path: 'equipment', component: EquipmentComponent},
   {path: 'pictures', component: PictureCategoriesComponent},
   {path: 'pictures/:id', component: PicturesComponent},
-  {path: 'book', component: UnderConstructionComponent},
+  {path: 'book', component: GoldenBookComponent},
   {path: 'disponibilities', component: ReservationsComponent},
-  {path: 'news', component: UnderConstructionComponent},
-  {path: 'links', component: UnderConstructionComponent},
+  {path: 'news', component: NewsComponent},
+  {path: 'links', component: LinksComponent},
   {path: 'contact', component: ContactComponent},
   {path: 'discover', component: DiscoverComponent},
   {path: 'prices', component: PricesComponent},
-  {path: 'addresses', component: UnderConstructionComponent},
+  {path: 'addresses', component: AddressesComponent},
   {path: 'login', component: LoginComponent}
 ];
 
@@ -66,7 +75,11 @@ const appRoutes: Routes = [
     DiscoverComponent,
     LoginComponent,
     ReservationsComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    AddressesComponent,
+    LinksComponent,
+    NewsComponent,
+    GoldenBookComponent
   ],
   imports: [
     BrowserModule,
@@ -76,6 +89,11 @@ const appRoutes: Routes = [
     FormsModule,
     FullCalendarModule,
     CalendarModule,
+    TableModule,
+    ProgressBarModule,
+    RatingModule,
+    NgxPaginationModule,
+    FileUploadModule,
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot(),
     ModalModule.forRoot(),

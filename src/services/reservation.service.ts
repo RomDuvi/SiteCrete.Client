@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './config/config.service';
 import { Reservation } from 'src/models/reservation.model';
 import { Observable } from 'rxjs';
+import { ReservationModel } from '../models/reservation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ReservationService extends ConfigService{
     this.apiUrl = this.config.baseUrl + this.config.reservationUrl;
   }
 
-  addReservation(reservation: Reservation): Observable<Reservation> {
+  addReservation(reservation: ReservationModel): Observable<Reservation> {
     return this.http.post<Reservation>(this.apiUrl, reservation, this.httpOptions);
   }
 
@@ -22,7 +23,7 @@ export class ReservationService extends ConfigService{
     return this.http.get<Reservation[]>(this.apiUrl, this.httpOptions);
   }
 
-  updateReservation(reservation: Reservation): Observable<Reservation> {
+  updateReservation(reservation: ReservationModel): Observable<Reservation> {
     return this.http.put<Reservation>(this.apiUrl, reservation, this.httpOptions);
   }
 

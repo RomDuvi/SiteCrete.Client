@@ -37,7 +37,7 @@ export class NavComponent implements OnInit {
   }
 
   goToHome() {
-    this.router.navigate(['/']);
+    location.reload();
   }
 
   setLanguage(lg: string) {

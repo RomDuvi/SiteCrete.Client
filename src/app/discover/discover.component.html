@@ -1,22 +1,181 @@
 <div class="mt-5 col-md-12 main-container">
-    <div class="col-sm-12 col-md-10 m-auto">
-      <div class="text-center">
-        <img alt="discover" src="../../assets/icone_discover.png" id="discover-icon">
-        <div>
-          {{'A DECOUVRIR' | translate}}
+  <div class="col-sm-12 col-md-10 m-auto">
+    <div class="text-center">
+      <img alt="discover" src="../../assets/icone_discover.png" id="discover-icon">
+      <div class="font-weight-bolder">
+        {{'A DECOUVRIR' | translate}}
+      </div>
+    </div>
+    <div class="text-center col-md-8 offset-md-2 mb-3 col-sm-12 mt-5" id="discover1"
+      (click)="updateText(discover1, updateTextTemplate)">
+      {{discover1.text}}
+    </div>
+    <div class="text-center" *ngIf="currentLang === 'fr'">
+      <iframe id='frameFr' width="100%" height="500px" frameborder="0" allowfullscreen
+        src="https://umap.openstreetmap.fr/fr/map/crete-de-lest_308392?scaleControl=true&miniMap=false&scrollWheelZoom=false&zoomControl=true&allowEdit=false&moreControl=true&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=null&onLoadPanel=undefined&captionBar=false&datalayers=813223&fullscreenControl=true&measureControl=false&editinosmControl=false">
+      </iframe>
+    </div>
+    <div class="text-center" *ngIf="currentLang === 'en'">
+      <iframe id='frameEn' width="100%" height="500px" frameborder="0" allowfullscreen
+        src="https://umap.openstreetmap.fr/fr/map/eastern-crete_315002?scaleControl=true&miniMap=false&scrollWheelZoom=false&zoomControl=true&allowEdit=false&moreControl=true&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=null&onLoadPanel=undefined&captionBar=false&datalayers=832271&fullscreenControl=true&measureControl=false&editinosmControl=false">
+      </iframe>
+    </div>
+    <div class="text-right col-sm-12" *ngIf="isAdmin">
+      <button class="btn btn-info" (click)="discoverModal(editDiscoverTemplate)">
+        Add a new place
+      </button>
+    </div>
+    <div class="col-sm-12 p-0">
+      <div *ngFor="let discover of discovers" class="col-sm-12 col-md-2 discover-card"
+        [ngClass]="{'selected': currentDiscover.id === discover.id}" (click)="selectDiscover(discover)">
+        {{discover.title}}
+      </div>
+    </div>
+    <div *ngIf="currentDiscover" class="col-md-12 p-1 mt-5 mb-5 place">
+      <div class="p-3">
+        <h3 class="discover-title d-inline-block">{{currentDiscover.title}}</h3>
+        <div class="discover-icon d-inline-block" *ngIf="currentDiscover.distance">
+          <div class="pic">
+            <img src="../../assets/icon_distance.png" alt="personnes">
+          </div>
+          <div class="description description-center">
+            {{currentDiscover.distance}}
+          </div>
+        </div>
+        <div class="discover-icon d-inline-block" *ngIf="currentDiscover.distanceDuration">
+          <div class="pic">
+            <img src="../../assets/icon_distance_duration.png" alt="personnes">
+          </div>
+          <div class="description description-center">
+            {{currentDiscover.distanceDuration}}
+          </div>
+        </div>
+        <div class="discover-icon d-inline-block" *ngIf="currentDiscover.duration">
+          <div class="pic">
+            <img src="../../assets/icon_duration.png" alt="personnes">
+          </div>
+          <div class="description description-center">
+            {{currentDiscover.duration}}
+          </div>
+        </div>
+
+        <div class="d-inline-block pull-right" *ngIf="isAdmin">
+          <button class="btn btn-danger" (click)="deleteDiscover(currentDiscover)">Delete</button>
         </div>
       </div>
-      <div class="text-center col-md-8 offset-md-2 mb-3 col-sm-12" id="discover">
-          {{discover1}}
+      <div class="row col-md-12">
+        <div class="col-md-6 p-0 pr-2 pl-2">
+          {{getDiscoverProperty(currentDiscover, 'description')}}
+        </div>
+        <div class="col-md-6 p-0">
+          <iframe width="100%" height="300px" frameborder="0" allowfullscreen
+            [src]="getSafeUrl(currentDiscover, 'umapUrl')"></iframe>
+        </div>
       </div>
-      <div class="text-center" *ngIf="currentLang === 'fr'" >
-        <iframe width="100%" height="500px" frameborder="0" allowfullscreen src="https://umap.openstreetmap.fr/fr/map/crete-de-lest_308392?scaleControl=true&miniMap=false&scrollWheelZoom=false&zoomControl=true&allowEdit=false&moreControl=true&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=null&onLoadPanel=undefined&captionBar=false&datalayers=813223&fullscreenControl=true&measureControl=false&editinosmControl=false">
-        </iframe>
-      </div>
-      <div class="text-center" *ngIf="currentLang === 'en'" >
-          <iframe width="100%" height="500px" frameborder="0" allowfullscreen src="https://umap.openstreetmap.fr/fr/map/eastern-crete_315002?scaleControl=true&miniMap=false&scrollWheelZoom=false&zoomControl=true&allowEdit=false&moreControl=true&searchControl=false&tilelayersControl=null&embedControl=false&datalayersControl=null&onLoadPanel=undefined&captionBar=false&datalayers=832271&fullscreenControl=true&measureControl=false&editinosmControl=false">
-          </iframe>
+      <div class="col-sm-12">
+        <ngx-gallery [options]="galleryOptions" [images]="currentGallery" *ngIf="!galleryLoading">
+        </ngx-gallery>
       </div>
     </div>
   </div>
-  
+</div>
+
+<ng-template #updateTextTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #textForm="ngForm">
+      <div class="form-group col-sm-12">
+        <label for="text">Text</label>
+        <textarea rows="18" class="form-control" required id="text" [(ngModel)]="textModel.text" name="text"
+          #text="ngModel"></textarea>
+        <div *ngIf="text.invalid && (text.dirty || text.touched)" class="alert alert-danger">
+          Text is required
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!textForm.form.valid"
+        (click)="saveText()">Submit</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editDiscoverTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Discover</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="discoverModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #discoverForm="ngForm">
+      <div class="form-group col-sm-12">
+        <label for="title">Titre</label>
+        <input type="text" class="form-control" required id="title" [(ngModel)]="discoverModel.title" name="title"
+          #title="ngModel" />
+        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+          Title is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="distance">Distance</label>
+        <input type="text" class="form-control" id="distance" [(ngModel)]="discoverModel.distance" name="distance"
+          #distance="ngModel" />
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="duration">Duration</label>
+        <input type="text" class="form-control" id="duration" [(ngModel)]="discoverModel.duration" name="duration"
+          #duration="ngModel" />
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="distanceDuration">Distance Duration</label>
+        <input type="text" class="form-control" id="distanceDuration" [(ngModel)]="discoverModel.distanceDuration"
+          name="distanceDuration" #distanceDuration="ngModel" />
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="descriptionFr">Description Fr</label>
+        <textarea rows="10" class="form-control" required id="descriptionFr" [(ngModel)]="discoverModel.descriptionFr"
+          name="descriptionFr" #descriptionFr="ngModel"></textarea>
+        <div *ngIf="descriptionFr.invalid && (descriptionFr.dirty || descriptionFr.touched)" class="alert alert-danger">
+          Description is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="descriptionEn">Description En</label>
+        <textarea rows="10" class="form-control" required id="descriptionEn" [(ngModel)]="discoverModel.descriptionEn"
+          name="descriptionEn" #descriptionEn="ngModel"></textarea>
+        <div *ngIf="descriptionEn.invalid && (descriptionEn.dirty || descriptionEn.touched)" class="alert alert-danger">
+          Description is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="umapUrlFr">Umap link Fr</label>
+        <textarea rows="3" class="form-control" required id="umapUrlFr" [(ngModel)]="discoverModel.umapUrlFr"
+          name="umapUrlFr" #umapUrlFr="ngModel"></textarea>
+        <div *ngIf="umapUrlFr.invalid && (umapUrlFr.dirty || umapUrlFr.touched)" class="alert alert-danger">
+          Umap is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="umapUrlEn">Umap link En</label>
+        <textarea rows="3" class="form-control" required id="umapUrlEn" [(ngModel)]="discoverModel.umapUrlEn"
+          name="umapUrlEn" #umapUrlEn="ngModel"></textarea>
+        <div *ngIf="umapUrlEn.invalid && (umapUrlEn.dirty || umapUrlEn.touched)" class="alert alert-danger">
+          Umap is required
+        </div>
+      </div>
+      <div *ngIf="!discoverModel.id" class="form-group col-sm-12">
+        <label for="pictures">Pictures for gallery</label><br />
+        <p-fileUpload mode="basic" name="gallery[]" customUpload="true" (uploadHandler)="onGalleryUpload($event)"
+          multiple="true" [auto]="true"></p-fileUpload>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="discoverModalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!discoverForm.form.valid || galleryLoading"
+        (click)="saveDiscover()">Submit</button>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,85 @@
+<div class="mt-5 col-md-12 main-container">
+  <div class="col-sm-12 col-md-10 m-auto">
+    <div class="text-center">
+      <img alt="links" src="../../assets/icon_links.png" id="links-icon">
+      <div class="font-weight-bolder">
+        {{'LIENS' | translate}}
+      </div>
+    </div>
+    <div class="card-columns mt-5">
+      <div *ngIf="isAdmin" class="card" (click)="addLink(addLinkTemplate)">
+        <div class="card-body">
+          <h5 class="card-title">New link</h5>
+          <div class="card-text text-center">
+            <img alt="add-link" src="../../assets/plus.png" id="plus">
+          </div>
+        </div>
+      </div>
+      <div class="card mt-2" *ngFor="let link of links" (click)="openLink(link)">
+        <div class="card-body">
+          <p class="card-title">{{getLinkProperty(link, 'name')}}</p>
+          <p class="card-text">{{getLinkProperty(link, 'description')}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #addLinkTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add link</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="linkModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #linkForm="ngForm">
+      <div class="form-group col-sm-12">
+        <label>Name Fr</label>
+        <input type="text" class="form-control" required id="linkNameFr" placeholder="Link Name fr"
+          [(ngModel)]="linkModel.nameFr" name="linkNameFr" #linkNameFr="ngModel" />
+        <div *ngIf="linkNameFr.invalid && (linkNameFr.dirty || linkNameFr.touched)" class="alert alert-danger">
+          Link Name is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label>Name En</label>
+        <input type="text" class="form-control" required id="linkNameEn" placeholder="Link Name En"
+          [(ngModel)]="linkModel.nameEn" name="linkNameEn" #linkNameEn="ngModel" />
+        <div *ngIf="linkNameEn.invalid && (linkNameEn.dirty || linkNameEn.touched)" class="alert alert-danger">
+          Link Name is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label>Description Fr</label>
+        <textarea class="form-control" required id="linkDescriptionFr" placeholder="Link Description fr"
+          [(ngModel)]="linkModel.descriptionFr" name="linkDescriptionFr" #linkDescriptionFr="ngModel"></textarea>
+        <div *ngIf="linkDescriptionFr.invalid && (linkDescriptionFr.dirty || linkDescriptionFr.touched)"
+          class="alert alert-danger">
+          Link Description is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label for="name">Description En</label>
+        <textarea class="form-control" required id="linkDescriptionEn" placeholder="Link Description En"
+          [(ngModel)]="linkModel.descriptionEn" name="linkDescriptionEn" #linkDescriptionEn="ngModel"></textarea>
+        <div *ngIf="linkDescriptionEn.invalid && (linkDescriptionEn.dirty || linkDescriptionEn.touched)"
+          class="alert alert-danger">
+          Link Description is required
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <label>Link</label>
+        <input type="text" class="form-control" required id="linkLink" placeholder="Link" [(ngModel)]="linkModel.link"
+          name="linkLink" #linkLink="ngModel" />
+        <div *ngIf="linkLink.invalid && (linkLink.dirty || linkLink.touched)" class="alert alert-danger">
+          Link is required
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="linkModalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!linkForm.form.valid"
+        (click)="saveLink()">Submit</button>
+      <button *ngIf="linkModel.id"  type="button" class="btn btn-danger pull-right mr-2" (click)="deleteLink(linkModel)">Delete</button>
+    </form>
+  </div>
+</ng-template>

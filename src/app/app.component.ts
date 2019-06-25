@@ -98,7 +98,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
       return;
     }
     const scrollHeight = outlet.get()[0].scrollHeight;
-    if (outlet.scrollTop() + outlet.height() === scrollHeight) {
+    if (outlet.scrollTop() + outlet.height() >= (scrollHeight - 8)) {
       $('#scroller').hide();
     } else {
       $('#scroller').show();

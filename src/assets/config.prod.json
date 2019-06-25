@@ -1,6 +1,14 @@
 {
-    "baseUrl": "https://rizdelhuile.com/api/",
+    "baseUrl": "https://skalaki.com/api/",
     "pictureUrl": "picture",
     "userUrl": "user",
-    "categoryUrl": "category"
+    "categoryUrl": "category",
+    "reservationUrl": "reservation",
+    "discoverUrl": "discover",
+    "textUrl": "text",
+    "linkUrl": "link",
+    "goldenCommentUrl": "book",
+    "entireVillaColor": "#5b9ce5",
+    "upstairsColor": "#b19ae5",
+    "downstairsColor": "#dc9252"
 }

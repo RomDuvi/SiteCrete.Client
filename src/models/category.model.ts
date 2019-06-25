@@ -9,4 +9,6 @@ export class Category extends BaseModel {
     src: SafeUrl;
     file: File;
     fileType: string;
+    path: string;
+    loaded: boolean;
 }

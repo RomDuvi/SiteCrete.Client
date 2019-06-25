@@ -4,7 +4,10 @@ export class Config {
   userUrl: string;
   categoryUrl: string;
   reservationUrl: string;
+  goldenCommentUrl: string;
+  discoverUrl: string;
   textUrl: string;
+  linkUrl: string;
   entireVillaColor: string;
   upstairsColor: string;
   downstairs1Color: string;
