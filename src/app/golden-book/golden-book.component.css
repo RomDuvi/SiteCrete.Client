@@ -4,6 +4,22 @@
     margin-bottom: 8px;
 }
 
+.answer {
+    max-width: 85%;
+    margin-bottom: 10px;
+}
+
+.answer .comment-header {
+    border-radius: 0 15px 0 0;
+    background-color: #2E6099;
+}
+
+.answer .comment-body {
+    border: 1px solid rgba(91, 156, 229);
+    border-radius: 0 0 15px 15px;
+    padding: 10px;
+}
+
 .comment div {
     padding: 8px;
 }

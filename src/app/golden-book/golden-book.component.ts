@@ -43,6 +43,12 @@ export class GoldenBookComponent implements OnInit {
     this.commentModalRef = this.modalService.show(modal);
   }
 
+  answerCommentModal(comment: GoldComment, modal: TemplateRef<any>) {
+    this.commentModel = new GoldComment();
+    Object.assign(this.commentModel, comment);
+    this.commentModalRef = this.modalService.show(modal);
+  }
+
   saveComment() {
     this.commentService.addComment(this.commentModel).subscribe(
       () => {},

@@ -8,7 +8,8 @@
     </div>
     <div class="col-sm-12 col-md-8 mt-5 offset-md-2">
       <div class="text-right pb-3">
-        <button class="btn btn-info" (click)="commentModal(addComment)" >{{'Laisser un commentaire' | translate}}</button>
+        <button class="btn btn-info"
+          (click)="commentModal(addComment)">{{'Laisser un commentaire' | translate}}</button>
       </div>
       <div *ngIf="comments.length === 0">
         <div class="no-comment">
@@ -16,24 +17,38 @@
         </div>
       </div>
       <div *ngIf="comments.length > 0" class="comments-container">
-        <div *ngFor="let comment of comments | paginate: { itemsPerPage: 4, currentPage: p }" class="comment">
-          <div class="comment-header d-inline-flex">
-            <div class="p-2 w-100">
-              {{comment.name}} | {{comment.stayStartDate | date:'dd/MM/yyyy'}} -
-              {{comment.stayEndDate | date:'dd/MM/yyyy'}}
+        <div *ngFor="let comment of comments | paginate: { itemsPerPage: 4, currentPage: p }">
+          <div class="comment">
+            <div class="comment-header d-inline-flex">
+              <div class="p-2 w-100">
+                {{comment.name}} | {{comment.stayStartDate | date:'dd/MM/yyyy'}} -
+                {{comment.stayEndDate | date:'dd/MM/yyyy'}}
+              </div>
+              <div class="p-2 flex-shrink-1" style="width:150px">
+                <p-rating [(ngModel)]="comment.evaluation" [cancel]="false" [readonly]="true"></p-rating>
+              </div>
             </div>
-            <div class="p-2 flex-shrink-1" style="width:150px">
-              <p-rating [(ngModel)]="comment.evaluation" [cancel]="false" [readonly]="true"></p-rating>
+            <div class="comment-body">
+              {{comment.comment}}
+            </div>
+            <div class="comment-footer">
+              {{comment.createdAt | date:'dd/MM/yyyy HH:mm'}}
+              <div *ngIf="isAdmin">
+                <button class="btn btn-primary mr-2"
+                  (click)="answerCommentModal(comment, answerComment)">Answer</button>
+                <button class="btn btn-danger" (click)="deleteComment(comment)">Delete</button>
+              </div>
             </div>
           </div>
-          <div class="comment-body">
-            {{comment.comment}}
-          </div>
-          <div class="comment-footer">
-            {{comment.createdAt | date:'dd/MM/yyyy HH:mm'}}
-            <div *ngIf="isAdmin">
-              <button class="btn btn-danger" (click)="deleteComment(comment)" >Delete</button>
-            </div> 
+          <div class="answer ml-auto" *ngIf="comment.answer" >
+            <div class="comment-header d-inline-flex">
+              <div class="p-2 w-100">
+                {{'Réponse du propriétaire' | translate}}
+              </div>
+            </div>
+            <div class="comment-body">
+              {{comment.answer}}
+            </div>
           </div>
         </div>
         <div class="text-center col-sm-12">
@@ -101,5 +116,29 @@
         (click)="saveComment()">Submit</button>
     </form>
     <p-progressBar class="mt-2" *ngIf="loading > 0" [value]="loading"></p-progressBar>
+  </div>
+</ng-template>
+
+<ng-template #answerComment>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Answer</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="answerCommentModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #answerForm="ngForm">
+      <div class="form-group col-sm-12">
+        <label for="comment">Answer</label>
+        <textarea style="width: 100%" rows="10" type="text" class="form-control" required id="answer"
+          placeholder="Answer" [(ngModel)]="commentModel.answer" name="answer" #answer="ngModel"></textarea>
+        <div *ngIf="answer.invalid && (answer.dirty || answer.touched)" class="alert alert-danger">
+          The answer is required!
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="answerCommentModalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="!answerForm.form.valid"
+        (click)="saveComment()">Answer</button>
+    </form>
   </div>
 </ng-template>
