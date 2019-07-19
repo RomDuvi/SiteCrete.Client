@@ -2,18 +2,31 @@
   <div class="col-sm-12 col-md-8 m-auto">
     <div class="text-center">
       <img alt="goldenBook" src="../../assets/icon_golden_book.png" id="book-icon">
-      <div class="font-weight-bolder">
-        {{"Livre d'or" | translate}}
+      <div class="font-weight-bolder title">
+        {{"LIVRE D'OR" | translate}}
       </div>
     </div>
-    <div class="col-sm-12 col-md-8 mt-5 offset-md-2">
-      <div class="text-right pb-3">
-        <button class="btn btn-info"
-          (click)="commentModal(addComment)">{{'Laisser un commentaire' | translate}}</button>
-      </div>
-      <div *ngIf="comments.length === 0">
-        <div class="no-comment">
-          {{'Pas encore de commentaires' | translate}}
+    <div class="col-sm-12 col-md-8 mt-5 offset-md-2 pb-3">
+      <div class="average-container">
+        <div class="pull-left d-inline-flex">
+          <div class="eval-number text-center">
+            <span>{{evaluationAverage}}</span>
+          </div>
+          <div class="d-flex align-items-start flex-column">
+            <div class="p-0 flex-shrink-1" style="width:150px">
+              <p-rating [(ngModel)]="evaluationAverage" [cancel]="false" [readonly]="true"></p-rating>
+            </div>
+            <div class="p-0 average-based">Based on {{numberOfEvaluation}} reviews</div>
+          </div>
+        </div>
+        <div class="text-right">
+          <button class="btn btn-info"
+            (click)="commentModal(addComment)">{{'Laisser un commentaire' | translate}}</button>
+        </div>
+        <div *ngIf="comments.length === 0">
+          <div class="no-comment">
+            {{'Pas encore de commentaires' | translate}}
+          </div>
         </div>
       </div>
       <div *ngIf="comments.length > 0" class="comments-container">
@@ -40,7 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="answer ml-auto" *ngIf="comment.answer" >
+          <div class="answer ml-auto" *ngIf="comment.answer">
             <div class="comment-header d-inline-flex">
               <div class="p-2 w-100">
                 {{'Réponse du propriétaire' | translate}}

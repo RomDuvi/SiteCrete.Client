@@ -29,4 +29,8 @@ export class GoldenBookService extends ConfigService {
   deleteComment(comment: GoldComment): Observable<GoldComment> {
     return this.http.post<GoldComment>(`${this.apiUrl}/delete`, comment, this.httpOptions);
   }
+
+  getCommentsEvaluationAverage(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/evaluationAverage`, this.httpOptions);
+  }
 }

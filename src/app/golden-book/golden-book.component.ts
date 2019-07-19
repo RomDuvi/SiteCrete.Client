@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { _ } from '../../services/translation.service';
 import { ConfirmationDialogComponent } from '../utils/confirmation/confirmation-dialog.component';
 import { ConfirmationDialogService } from '../utils/confirmation/ConfirmationDialog.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-golden-book',
@@ -18,6 +19,8 @@ export class GoldenBookComponent implements OnInit {
   commentModel: GoldComment;
   commentModalRef: BsModalRef;
   isAdmin: boolean;
+  evaluationAverage: number;
+  numberOfEvaluation: number;
 
   constructor(
     private commentService: GoldenBookService,
@@ -33,8 +36,12 @@ export class GoldenBookComponent implements OnInit {
 
     this.isAdmin = this.authService.isAdminLogged();
 
-    this.commentService.getComments().subscribe(
-      data => this.comments = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    forkJoin(this.commentService.getComments(), this.commentService.getCommentsEvaluationAverage()).subscribe(
+      ([comments, average]) => {
+        this.evaluationAverage = average;
+        this.comments = comments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        this.numberOfEvaluation = this.comments.length;
+      }
     );
   }
 
