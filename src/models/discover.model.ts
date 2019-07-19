@@ -1,7 +1,9 @@
 import { BaseModel } from './baseModel.model';
 import { Picture } from 'src/models/picture.model';
+import { SafeUrl } from '@angular/platform-browser';
 export class Discover extends BaseModel {
-    title: string;
+    titleFr: string;
+    titleEn: string;
     distancte: string;
     duration: string;
     distanceDuration: string;
@@ -11,4 +13,5 @@ export class Discover extends BaseModel {
     umapUrlEn: string;
     picture: Picture;
     pictures: Picture[];
+    safeUrl: SafeUrl;
 }

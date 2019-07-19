@@ -89,10 +89,7 @@ export class DiscoverComponent implements OnInit {
     this.discoverService.getDiscovers().subscribe(
       data => {
         this.discovers = data;
-        this.currentDiscover = this.discovers[0];
-        if (data.length > 0) {
-          this.initGallery();
-        }
+        this.selectDiscover(this.discovers[0], false);
       }
     );
   }
@@ -194,7 +191,6 @@ export class DiscoverComponent implements OnInit {
   }
 
   onGalleryUpload(event) {
-    console.log(event);
     this.discoverModel.pictures = [];
     for (const file of event.files) {
       const reader = new FileReader();
@@ -212,10 +208,14 @@ export class DiscoverComponent implements OnInit {
     }
   }
 
-  selectDiscover(discover: Discover) {
+  selectDiscover(discover: Discover, scroll: boolean = true) {
     this.currentDiscover = discover;
+    this.currentDiscover.safeUrl = this.getSafeUrl(this.currentDiscover, 'umapUrl');
+    this.cd.markForCheck();
     this.initGallery();
-    $('#outlet').animate({ scrollTop: $('#outlet').scrollTop() + document.body.scrollHeight }, 600);
+    if (scroll) {
+      $('#outlet').animate({ scrollTop: $('#outlet').scrollTop() + document.body.scrollHeight }, 600);
+    }
   }
 
   initGallery() {
@@ -249,7 +249,6 @@ export class DiscoverComponent implements OnInit {
           });
         });
       }
-    )
+    );
   }
-
 }

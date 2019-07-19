@@ -28,12 +28,12 @@
     <div class="col-sm-12 p-0">
       <div *ngFor="let discover of discovers" class="col-sm-12 col-md-2 discover-card"
         [ngClass]="{'selected': currentDiscover.id === discover.id}" (click)="selectDiscover(discover)">
-        {{discover.title}}
+        {{getDiscoverProperty(discover, 'title')}}
       </div>
     </div>
     <div *ngIf="currentDiscover" class="col-md-12 p-1 mt-5 mb-5 place">
       <div class="p-3">
-        <h3 class="discover-title d-inline-block">{{currentDiscover.title}}</h3>
+        <h3 class="discover-title d-inline-block">{{getDiscoverProperty(currentDiscover, 'title')}}</h3>
         <div class="discover-icon d-inline-block" *ngIf="currentDiscover.distance">
           <div class="pic">
             <img src="../../assets/icon_distance.png" alt="personnes">
@@ -60,16 +60,17 @@
         </div>
 
         <div class="d-inline-block pull-right" *ngIf="isAdmin">
+          <button class="btn btn-primary mr-2" (click)="discoverModal(editDiscoverTemplate, currentDiscover)">Edit</button>
           <button class="btn btn-danger" (click)="deleteDiscover(currentDiscover)">Delete</button>
         </div>
       </div>
       <div class="row col-md-12">
-        <div class="col-md-6 p-0 pr-2 pl-2">
+        <div class="col-md-6 p-0 pr-2 pl-2 discover-description">
           {{getDiscoverProperty(currentDiscover, 'description')}}
         </div>
         <div class="col-md-6 p-0">
           <iframe width="100%" height="300px" frameborder="0" allowfullscreen
-            [src]="getSafeUrl(currentDiscover, 'umapUrl')"></iframe>
+            [src]="currentDiscover.safeUrl"></iframe>
         </div>
       </div>
       <div class="col-sm-12">
@@ -114,25 +115,33 @@
   <div class="modal-body">
     <form #discoverForm="ngForm">
       <div class="form-group col-sm-12">
-        <label for="title">Titre</label>
-        <input type="text" class="form-control" required id="title" [(ngModel)]="discoverModel.title" name="title"
-          #title="ngModel" />
-        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
-          Title is required
+        <label for="titleFr">Titre Fr</label>
+        <input type="text" class="form-control" required id="titleFr" [(ngModel)]="discoverModel.titleFr" name="titleFr"
+          #titleFr="ngModel" />
+        <div *ngIf="titleFr.invalid && (titleFr.dirty || titleFr.touched)" class="alert alert-danger">
+          Title Fr is required
         </div>
       </div>
+      <div class="form-group col-sm-12">
+          <label for="titleEn">Titre En</label>
+          <input type="text" class="form-control" required id="titleEn" [(ngModel)]="discoverModel.titleEn" name="titleEn"
+            #titleEn="ngModel" />
+          <div *ngIf="titleEn.invalid && (titleEn.dirty || titleEn.touched)" class="alert alert-danger">
+            Title En is required
+          </div>
+        </div>
       <div class="form-group col-sm-12">
         <label for="distance">Distance</label>
         <input type="text" class="form-control" id="distance" [(ngModel)]="discoverModel.distance" name="distance"
           #distance="ngModel" />
       </div>
       <div class="form-group col-sm-12">
-        <label for="duration">Duration</label>
+        <label for="duration">Durée à pied</label>
         <input type="text" class="form-control" id="duration" [(ngModel)]="discoverModel.duration" name="duration"
           #duration="ngModel" />
       </div>
       <div class="form-group col-sm-12">
-        <label for="distanceDuration">Distance Duration</label>
+        <label for="distanceDuration">Durée en voiture</label>
         <input type="text" class="form-control" id="distanceDuration" [(ngModel)]="discoverModel.distanceDuration"
           name="distanceDuration" #distanceDuration="ngModel" />
       </div>

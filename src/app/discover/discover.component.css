@@ -74,3 +74,7 @@ img {
     display: inline-block;
     height: 35px;
 }
+
+.discover-description {
+    white-space: pre-line;
+}
