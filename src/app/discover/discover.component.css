@@ -1,80 +1,208 @@
 .main-container {
-    font-family: 'Candara';
-    color: rgba(91, 156, 229, 255);
-    font-size: 1.2em;
-    padding: 0;
+  font-family: 'Candara';
+  color: rgba(91, 156, 229, 255);
+  font-size: 1.2em;
+  padding: 0;
 }
 
 img {
-    max-height: 60px;
+  max-height: 60px;
 }
 
 #discover {
-    margin-top: 80px;
+  margin-top: 80px;
 }
 
-.main-container > div {
-    margin-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
+.main-container>div {
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .place {
-    background-color: rgba(0, 0, 0, 0.068);
+  background-color: rgba(0, 0, 0, 0.068);
 }
 
 .discover-card {
-    display: inline-block;
-    padding: 6px;
-    margin: 8px;
-    background-color: rgba(255, 255, 255, 0.808);
-    width: 100%;
-    height: 45px;
-    -webkit-box-shadow: 0px 0px 37px 0px rgba(181,181,181,1);
-    -moz-box-shadow: 0px 0px 37px 0px rgba(181,181,181,1);
-    box-shadow: 0px 0px 37px 0px rgba(181,181,181,1);
-    cursor: pointer;
-    transition: transform .25s ease;
-    border-radius: 4px;
-    font-size: 1.03em;
-    font-weight: bold;
-    vertical-align: center;
+  display: inline-block;
+  padding: 6px;
+  margin: 8px;
+  background-color: rgba(255, 255, 255, 0.808);
+  width: 100%;
+  height: 45px;
+  -webkit-box-shadow: 0px 0px 37px 0px rgba(181, 181, 181, 1);
+  -moz-box-shadow: 0px 0px 37px 0px rgba(181, 181, 181, 1);
+  box-shadow: 0px 0px 37px 0px rgba(181, 181, 181, 1);
+  cursor: pointer;
+  transition: transform .25s ease;
+  border-radius: 4px;
+  font-size: 1.03em;
+  font-weight: bold;
+  vertical-align: center;
 }
 
-.discover-card:hover{
-    transform: scale(1.02);
+.discover-card:hover {
+  transform: scale(1.02);
 }
 
 .selected {
-    background-color: rgba(91, 156, 229, 255);
-    color: white;
+  background-color: rgba(91, 156, 229, 255);
+  color: white;
 }
 
 .discover-title {
-    font-weight: bold;
-    font-size: 2.3em;
-    height: 100%;
-    vertical-align: top;
+  font-weight: bold;
+  font-size: 2.3em;
+  height: 100%;
+  vertical-align: top;
 }
 
 .discover-icon {
-    margin-left: 18px;
-    padding-left: 10px;
+  margin-left: 18px;
+  padding-left: 10px;
 }
 
 .discover-icon .description-center {
-    text-align: center;
+  text-align: center;
 }
 
 .pic {
-    text-align: center;
+  text-align: center;
 }
 
 .discover-icon .pic img {
-    display: inline-block;
-    height: 35px;
+  display: inline-block;
+  height: 35px;
 }
 
 .discover-description {
-    white-space: pre-line;
+  white-space: pre-line;
+}
+
+.gallery-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  margin-right: 30px;
+}
+
+.picture {
+  flex: 0 0 auto;
+  cursor: pointer;
+  width: 20%;
+  margin: 8px;
+}
+
+.picture img {
+  max-height: 130px;
+  width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.map-frame {
+    width: 100%;
+    min-height: 300px;
+    height: 100%;
+}
+
+@media only screen and (max-width: 580px) {
+  .picture {
+    width: 50%;
+  }
+}
+
+
+#preview {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  display: inline-block;
+}
+
+#wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+#img-wrapper {
+  height: 100%;
+}
+
+.helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+#display {
+  max-width: 100%;
+  max-height: 100%;
+  padding-right: 0;
+  vertical-align: middle;
+}
+
+#picture {
+  padding: 0;
+  display: inline-block;
+  text-align: center;
+}
+
+#details {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#img-preview {
+  padding: 0;
+  margin: auto;
+  margin-top: 50px;
+  height: 85%;
+}
+
+#close {
+  position: absolute;
+  top: 25px;
+  right: 40px;
+  cursor: pointer;
+}
+
+#close img {
+  height: 40px;
+}
+
+#next {
+  cursor: pointer;
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  max-width: 35px;
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH";
+}
+
+#previous {
+  cursor: pointer;
+  position: absolute;
+  left: 70px;
+  top: 50%;
+}
+
+#previous img {
+  max-width: 35px;
+}
+
+#next img {
+  max-width: 35px;
 }

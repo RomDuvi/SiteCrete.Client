@@ -12,7 +12,7 @@ import { ConfirmationDialogService } from '../utils/confirmation/ConfirmationDia
 import { PictureService } from '../../services/picture.service';
 import { Picture } from 'src/models/picture.model';
 import { DomSanitizer } from '@angular/platform-browser';
-import { INgxGalleryImage, NgxGalleryOrder } from 'ngx-gallery';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-discover',
@@ -34,21 +34,10 @@ export class DiscoverComponent implements OnInit {
   discoverModel: Discover;
 
   galleryLoading: boolean;
-  currentGallery: INgxGalleryImage[];
+  currentGallery: Observable<Picture[]>;
+  isPreview: boolean;
 
-  galleryOptions = [
-    {
-        width: '100%',
-        height: '120px',
-        thumbnailsColumns: 6,
-        thumbnailsRows:  1,
-        thumbnailsPercent: 100,
-        image: false,
-        lazyLoading: true,
-        thumbnailsOrder: NgxGalleryOrder.Row,
-        previewKeyboardNavigation: true
-    }
-  ];
+  currentPicture: Picture;
 
 
   constructor(
@@ -66,6 +55,17 @@ export class DiscoverComponent implements OnInit {
     translate.onLangChange.subscribe(event => {
       this.afterInit();
     });
+
+    this.currentGallery = this.pictureService._picturesCast;
+
+    this.pictureService._pictureCast.subscribe(
+      picture => {
+        if (picture != null) {
+          this.currentPicture = picture;
+          this.pictureService.getPictureFile(picture.id);
+        }
+      }
+    );
   }
 
   ngOnInit() {
@@ -74,6 +74,11 @@ export class DiscoverComponent implements OnInit {
     this.discover1 = new TextModel();
     this.isAdmin = this.authService.isAdminLogged();
     this.afterInit();
+    this.currentGallery.subscribe(
+      pictures => {
+        this.initGallery(pictures);
+      }
+    );
   }
 
   afterInit() {
@@ -152,18 +157,7 @@ export class DiscoverComponent implements OnInit {
           this.discoverModel.pictures.forEach(picture => {
             picture.discoverId = newDiscover.id;
             picture.order = -1;
-            this.pictureService.addPicture(picture, progress => console.log(progress)).subscribe(
-              data => {},
-              err => {
-                this.discoverService.deleteDiscover(newDiscover).subscribe();
-                this.toast.error('An error occured the place is deleted');
-              },
-              () => {
-                this.discoverModalRef.hide();
-                this.toast.success('Place created');
-                this.ngOnInit();
-              }
-            );
+            this.pictureService.addPicture(picture, progress => console.log(progress), () => this.ngOnInit());
           });
         },
         err => {
@@ -212,43 +206,39 @@ export class DiscoverComponent implements OnInit {
     this.currentDiscover = discover;
     this.currentDiscover.safeUrl = this.getSafeUrl(this.currentDiscover, 'umapUrl');
     this.cd.markForCheck();
-    this.initGallery();
+    this.pictureService.getPicturesForDiscover(this.currentDiscover.id);
     if (scroll) {
       $('#outlet').animate({ scrollTop: $('#outlet').scrollTop() + document.body.scrollHeight }, 600);
     }
   }
 
-  initGallery() {
-    this.currentGallery = [];
-    this.pictureService.getPicturesForDiscover(this.currentDiscover.id).subscribe(
-      data => {
-        this.galleryLoading = true;
-        data.forEach((picture, i) => {
-          let img: INgxGalleryImage = {};
-          img.description = picture.displayName + '<br/>' + (i + 1) + '/' + data.length;
-          img.label = picture.displayName;
-          this.currentGallery.push(img);
-
-          this.pictureService.getThumbFile(picture.id).subscribe((bytes:any) => {
-            const thumbPath = `data:${picture.type};base64,${bytes}`;
-            picture.thumbSrc = thumbPath;
-            img.small = thumbPath;
-            const newThumbs = this.currentGallery.slice(0, this.currentGallery.length);
-            this.currentGallery.push(img);
-            this.currentGallery = newThumbs;
-            this.pictureService.getPictureFile(picture.id).subscribe((bytes: any) => {
-              const path = `data:${picture.type};base64,${bytes}`;
-              img.big = path;
-              img.medium = path;
-              const newImages = this.currentGallery.slice(0, this.currentGallery.length);
-              this.currentGallery = newImages;
-            },
-            err => console.log(err),
-            () => this.galleryLoading = false
-            );
-          });
-        });
-      }
-    );
+  initGallery(pictures: Picture[]) {
+    pictures.forEach(picture => {
+      this.pictureService.getThumbFile(picture.id);
+    });
   }
+
+  //#region PREVIEW
+  displayPreview(picture: Picture) {
+    this.isPreview = true;
+    this.pictureService.getCurrentPicture(picture.id);
+  }
+
+  nextPreview() {
+    this.pictureService.getNextPicture();
+  }
+
+  previousPreview() {
+    this.pictureService.getPreviousPicture();
+  }
+
+  isLastPreview() {
+    return this.pictureService.isLastPicture();
+  }
+
+  isFirstPreview() {
+    return this.pictureService.isFirstPicture();
+  }
+  //#endregion PREVIEW
+
 }
