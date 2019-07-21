@@ -1,60 +1,175 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { ConfigService } from './config/config.service';
 import { map, tap, last } from 'rxjs/operators';
 import { Picture } from 'src/models/picture.model';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class PictureService extends ConfigService {
     apiUrl: string;
+
+    private _pictures = new BehaviorSubject<Picture[]>([]);
+    _picturesCast = this._pictures.asObservable();
+
+    private _currentPicture = new BehaviorSubject<Picture>(null);
+    _pictureCast = this._currentPicture.asObservable();
+
+    private dataStore: {
+        pictures: Picture[],
+        picturesByCategory: Picture[]
+    };
+
     constructor(
-        protected http: HttpClient
+        protected http: HttpClient,
+        private sanitizer: DomSanitizer,
+        private toast: ToastrService
     ) {
         super();
         this.apiUrl = this.config.baseUrl + this.config.pictureUrl;
+        this.dataStore = { pictures: [], picturesByCategory: [] };
     }
 
-    addPicture(picture: Picture, progressCallback: any): Observable<Picture> {
-        const formData = new FormData();
-        formData.append('file', picture.file);
-        delete picture.file;
-        formData.append('picture', JSON.stringify(picture));
-
-        const req = new HttpRequest('POST', this.apiUrl, formData, { reportProgress: true});
-        return this.http.request(req).pipe(
-            map(event => this.getEventMessage(event, picture)),
-            tap(message => progressCallback(message)),
-            last(progressCallback('Picture saved')),
-          );
+    private assign() {
+      this._pictures.next(Object.assign({}, this.dataStore).pictures);
     }
 
-    getPictures(): Observable<Picture[]> {
-        return this.http.get<Picture[]>(this.apiUrl, this.httpOptions);
+    addPicture(picture: Picture, progressCallback: any, endCallBack: any) {
+      const formData = new FormData();
+      formData.append('file', picture.file);
+      delete picture.file;
+      formData.append('picture', JSON.stringify(picture));
+
+      const req = new HttpRequest('POST', this.apiUrl, formData, { reportProgress: true});
+      this.http.request(req).pipe(
+          map(event => this.getEventMessage(event, picture)),
+          tap(message => progressCallback(message)),
+          last(progressCallback('Picture saved')),
+        ).subscribe(
+          (data: Picture) => {
+            this.dataStore.pictures.push(data);
+          },
+          err => console.log(err),
+          () => {
+            this.assign();
+            this.toast.success('Picture saved!');
+            endCallBack();
+          }
+        );
     }
 
-    getPictureFile(pictureId: string): Observable<any> {
-        return this.http.get<any>(this.apiUrl + '/file/' + pictureId, this.httpOptions);
+    getPictures() {
+      this.http.get<Picture[]>(this.apiUrl, this.httpOptions).subscribe(
+        pictures => this.dataStore.pictures = pictures,
+        err => console.log(err),
+        () => this.assign()
+      );
     }
 
-    getThumbFile(pictureId: string): Observable<any> {
-      return this.http.get<any>(this.apiUrl + '/thumb/' + pictureId, this.httpOptions);
+    getPictureFile(pictureId: string) {
+      const picture = this.dataStore.pictures.find(x => x.id === pictureId);
+
+      if (picture.pictureSrc != null) {
+        return;
+      }
+
+      this.http.get<any>(this.apiUrl + '/file/' + pictureId, this.httpOptions).subscribe(
+        data => {
+          const src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:${picture.type};base64,${data}`);
+          picture.loaded = true;
+          picture.pictureSrc = src;
+        }
+      );
     }
 
-    getPicturesByCategory(categoryId: string): Observable<Picture[]> {
-        return this.http.get<Picture[]>(this.apiUrl + '/category/' + categoryId, this.httpOptions);
+    getThumbFile(pictureId: string) {
+      const picture = this.dataStore.pictures.find(x => x.id === pictureId);
+      if (picture.thumbSrc != null) {
+        return;
+      }
+
+      this.http.get<any>(this.apiUrl + '/thumb/' + pictureId, this.httpOptions).subscribe(
+        data => {
+          const src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:${picture.type};base64,${data}`);
+          picture.thumbSrc = src;
+        }
+      );
     }
 
-    deletePicture(picture: Picture): Observable<Picture> {
-        return this.http.post<Picture>(this.apiUrl + '/delete', picture, this.httpOptions);
+    getPicturesByCategory(categoryId: string) {
+      this.http.get<Picture[]>(this.apiUrl + '/category/' + categoryId, this.httpOptions).subscribe(
+        pictures => this.dataStore.pictures = pictures.sort((a, b) => a.order - b.order),
+        err => console.log(err),
+        () => this.assign()
+      );
     }
 
-    updatePicture(picture: Picture): Observable<Picture> {
-        return this.http.put<Picture>(this.apiUrl, picture, this.httpOptions);
+    deletePicture(picture: Picture, endCallback: any) {
+      this.http.post<Picture>(this.apiUrl + '/delete', picture, this.httpOptions).subscribe(
+        () => {
+          const index = this.dataStore.pictures.indexOf(picture);
+          this.dataStore.pictures.splice(index, 1);
+        },
+        err => console.log(err),
+        () => {
+          this.assign();
+          this.toast.success('Picture Deleted!');
+          endCallback();
+        }
+      );
     }
 
-    getPicturesForDiscover(discoverId: string): Observable<Picture[]> {
-      return this.http.get<Picture[]>(this.apiUrl + '/discover/' + discoverId, this.httpOptions);
+    updatePicture(picture: Picture, endCallback: any) {
+      let pictureToUpdate = this.dataStore.pictures.find(x => x.id === picture.id);
+
+      this.http.put<Picture>(this.apiUrl, picture, this.httpOptions).subscribe(
+        (p: Picture) => pictureToUpdate = p,
+        err => console.log(err),
+        () => {
+          this.toast.success('Picture updated!');
+          this.assign();
+          endCallback();
+        }
+      );
+    }
+
+    getPicturesForDiscover(discoverId: string) {
+      this.http.get<Picture[]>(this.apiUrl + '/discover/' + discoverId, this.httpOptions).subscribe(
+        pictures => this.dataStore.pictures = pictures,
+        err => console.log(err),
+        () => this.assign()
+      );
+    }
+
+    getCurrentPicture(pictureId: string) {
+      const picture = this.dataStore.pictures.find(x => x.id === pictureId);
+      this._currentPicture.next(picture);
+    }
+
+    getNextPicture() {
+      const index = this.dataStore.pictures.indexOf(this._currentPicture.getValue()) + 1;
+      if (index >= this.dataStore.pictures.length) {
+        return;
+      }
+      this._currentPicture.next(this.dataStore.pictures[index]);
+    }
+
+    getPreviousPicture() {
+      const index = this.dataStore.pictures.indexOf(this._currentPicture.getValue()) - 1;
+      if (index < 0) {
+        return;
+      }
+      this._currentPicture.next(this.dataStore.pictures[index]);
+    }
+
+    isLastPicture() {
+      return this._currentPicture.getValue().id === this.dataStore.pictures[this.dataStore.pictures.length - 1].id;
+    }
+
+    isFirstPicture() {
+      return this._currentPicture.getValue().id === this.dataStore.pictures[0].id;
     }
 
     private getEventMessage(event: HttpEvent<any>, picture: Picture): any {
