@@ -57,13 +57,45 @@ export class GoldenBookComponent implements OnInit {
   }
 
   saveComment() {
-    this.commentService.addComment(this.commentModel).subscribe(
-      () => {},
-      err => console.log(err),
-      () => {
-        this.commentModalRef.hide();
-        this.toast.success(_('Comment created!'));
-        this.ngOnInit();
+    if (this.commentModel.id) {
+      this.commentService.addComment(this.commentModel).subscribe(
+        () => {},
+        err => console.log(err),
+        () => {
+          this.commentModalRef.hide();
+          this.toast.success(_('Comment created!'));
+          this.ngOnInit();
+        }
+      );
+    } else {
+      this.commentService.updateComment(this.commentModel).subscribe(
+        () => {},
+        err => console.log(err),
+        () => {
+          this.commentModalRef.hide();
+          this.toast.success(_('Answer updated!'));
+          this.ngOnInit();
+        }
+      );
+    }
+  }
+
+  deleteCommentAnswer(comment: GoldComment) {
+    this.confirmationService.confirm('Are you sure?').subscribe(
+      result => {
+        if (result) {
+          this.commentModel = new GoldComment();
+          Object.assign(this.commentModel, comment);
+          this.commentModel.answer = null;
+          this.commentService.updateComment(this.commentModel).subscribe(
+            () => {},
+            err => console.log(err),
+            () => {
+              this.toast.success(_('Answer deleted!'));
+              this.ngOnInit();
+            }
+          );
+        }
       }
     );
   }

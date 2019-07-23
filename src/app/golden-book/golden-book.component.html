@@ -58,6 +58,10 @@
               <div class="p-2 w-100">
                 {{'Réponse du propriétaire' | translate}}
               </div>
+              <div class="p-2 flex-shrink-1" style="width:210px">
+                <button class="btn btn-success d-inline-block mr-2" (click)="answerCommentModal(comment, answerComment)" >Edit</button>
+                <button class="btn btn-danger d-inline-block" (click)="deleteCommentAnswer(comment)" >Delete</button>
+              </div>
             </div>
             <div class="comment-body">
               {{comment.answer}}
