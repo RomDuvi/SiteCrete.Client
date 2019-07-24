@@ -131,6 +131,7 @@ export class DiscoverComponent implements OnInit {
     if (discover) {
       Object.assign(this.discoverModel, discover);
     }
+    console.log(this.discoverModel);
 
     this.discoverModalRef = this.modalService.show(modalRef, {class: 'modal-lg'});
   }
@@ -204,8 +205,15 @@ export class DiscoverComponent implements OnInit {
         // need to run CD since file load runs outside of zone
         this.cd.markForCheck();
         this.galleryLoading = false;
+        console.log(this.discoverModel);
       };
     }
+  }
+
+  removePictureFromDiscover(name: string) {
+    const p = this.discoverModel.pictures.find(x => x.file.name === name);
+    const idx = this.discoverModel.pictures.indexOf(p);
+    this.discoverModel.pictures.splice(idx, 1);
   }
 
   selectDiscover(discover: Discover, scroll: boolean = true) {
