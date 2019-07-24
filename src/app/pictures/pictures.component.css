@@ -131,3 +131,11 @@
 #next img {
   max-width: 35px;
 }
+
+.picture-legend {
+  color: white;
+  text-align: center;
+  position: absolute;
+  bottom: 3px;
+  width: 100%;
+}

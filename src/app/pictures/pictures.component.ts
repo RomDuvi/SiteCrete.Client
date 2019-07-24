@@ -26,6 +26,7 @@ export class PicturesComponent implements OnInit {
   categories: Category[];
   pictures: Observable<Picture[]>;
   currentPicture: Picture;
+  currentIndex: number;
 
   dropdownCategories: Category[];
   dropdownSettings: any;
@@ -176,16 +177,19 @@ export class PicturesComponent implements OnInit {
 
 
   //#region PREVIEW
-  displayPreview(picture: Picture) {
+  displayPreview(picture: Picture, i: number) {
+    this.currentIndex = i + 1 ;
     this.isPreview = true;
     this.pictureService.getCurrentPicture(picture.id);
   }
 
   nextPreview() {
+    this.currentIndex++;
     this.pictureService.getNextPicture();
   }
 
   previousPreview() {
+    this.currentIndex--;
     this.pictureService.getPreviousPicture();
   }
 
@@ -195,6 +199,10 @@ export class PicturesComponent implements OnInit {
 
   isFirstPreview() {
     return this.pictureService.isFirstPicture();
+  }
+
+  getIndexLegend() {
+    return `${this.currentIndex} / ${this.pictureService.getNumberOfPictures()}`;
   }
   //#endregion PREVIEW
   

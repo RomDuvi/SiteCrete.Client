@@ -16,7 +16,7 @@
     </div>
     <div class="card-container">
       <div class="picture-card col-sm-6 col-md-3 col-lg-2 d-inline-block" *ngFor="let picture of pictures | async; index as i;">
-        <img [src]="picture.thumbSrc" alt="thumb" *ngIf="picture.thumbSrc" (click)="displayPreview(picture)" >
+        <img [src]="picture.thumbSrc" alt="thumb" *ngIf="picture.thumbSrc" (click)="displayPreview(picture, i)" >
         <img src="../../assets/spinner.svg" alt="spinner" *ngIf="!picture.thumbSrc">
       </div> 
     </div>
@@ -85,6 +85,10 @@
           <img [src]="currentPicture.pictureSrc" alt="image" id="display" *ngIf="currentPicture.loaded" >
           <img src="../../assets/spinner.svg" alt="Card image cap" *ngIf="!currentPicture.loaded">
         </div>
+      </div>
+      <div class="picture-legend">
+        {{currentPicture.displayName}}<br>
+        {{getIndexLegend()}}
       </div>
     </div>
     <div id="close" (click)="isPreview = false">

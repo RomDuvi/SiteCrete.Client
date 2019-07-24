@@ -70,6 +70,9 @@ export class PictureService extends ConfigService {
 
     getPictureFile(pictureId: string) {
       const picture = this.dataStore.pictures.find(x => x.id === pictureId);
+      if (!picture) {
+        return;
+      }
 
       if (picture.pictureSrc != null) {
         return;
@@ -170,6 +173,10 @@ export class PictureService extends ConfigService {
 
     isFirstPicture() {
       return this._currentPicture.getValue().id === this.dataStore.pictures[0].id;
+    }
+
+    getNumberOfPictures() {
+      return this.dataStore.pictures.length;
     }
 
     private getEventMessage(event: HttpEvent<any>, picture: Picture): any {
