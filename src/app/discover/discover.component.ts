@@ -12,7 +12,7 @@ import { ConfirmationDialogService } from '../utils/confirmation/ConfirmationDia
 import { PictureService } from '../../services/picture.service';
 import { Picture } from 'src/models/picture.model';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-discover',
@@ -185,6 +185,11 @@ export class DiscoverComponent implements OnInit {
     );
   }
 
+  getPictureName(path: string) {
+    const last = path.substr(path.lastIndexOf('\\'));
+    return last.substr(last.indexOf('_') + 1);
+  }
+
   onGalleryUpload(event) {
     this.discoverModel.pictures = [];
     for (const file of event.files) {
@@ -208,6 +213,10 @@ export class DiscoverComponent implements OnInit {
     const p = this.discoverModel.pictures.find(x => x.file.name === name);
     const idx = this.discoverModel.pictures.indexOf(p);
     this.discoverModel.pictures.splice(idx, 1);
+  }
+
+  deletePictureFromDiscover(picture: Picture) {
+    this.pictureService.deletePicture(picture, () => this.selectDiscover(this.currentDiscover, false));
   }
 
   selectDiscover(discover: Discover, scroll: boolean = true) {

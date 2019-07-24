@@ -200,14 +200,17 @@
               <p-fileUpload mode="basic" name="gallery[]" customUpload="true" (uploadHandler)="onGalleryUpload($event)"
                 multiple="true" [auto]="true"></p-fileUpload>
             </div>
-            <div *ngFor="let picture of discoverModel.pictures">
-              <div class="col-sm-12" *ngIf="picture.file" >
+            <div *ngIf="!discoverModel.id" >
+              <div class="col-sm-12" *ngFor="let picture of discoverModel.pictures" >
                 {{picture.file.name}}
                 <em class="fa fa-times remove-picture" (click)="removePictureFromDiscover(picture.file.name)" ></em>
               </div>
-              <div class="col-sm-12" *ngIf="!picture.file" > 
-                {{picture.path}}
-                <em class="fa fa-times remove-picture" (click)="removePictureFromDiscover(picture.file.name)" ></em>
+            </div>
+            <div *ngIf="discoverModel.id" >
+              <h4>Pictures</h4>
+              <div class="col-sm-12" *ngFor="let picture of currentGallery | async" >
+                {{getPictureName(picture.path)}}
+                <em class="fa fa-times remove-picture" (click)="deletePictureFromDiscover(picture)" ></em>
               </div>
             </div>
           </div>
