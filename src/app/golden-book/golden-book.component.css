@@ -17,6 +17,10 @@ img {
     margin-bottom: 8px;
 }
 
+.btn-comment {
+    background-color: rgba(91, 156, 229);
+}
+
 .answer {
     max-width: 85%;
     margin-bottom: 10px;

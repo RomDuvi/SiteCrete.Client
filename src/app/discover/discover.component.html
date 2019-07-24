@@ -34,7 +34,10 @@
     <div *ngIf="currentDiscover" class="col-md-12 p-1 mt-5 mb-5 place">
       <div class="p-3">
         <h3 class="discover-title d-inline-block">{{getDiscoverProperty(currentDiscover, 'title')}}</h3>
-        <div class="discover-icon d-inline-block" *ngIf="currentDiscover.distance">
+        <div class="discover-icon d-inline-block popover-wrapper" *ngIf="currentDiscover.distance" >
+          <div class="popover-content">
+            {{'Distance depuis Skalaki' | translate}}
+          </div>
           <div class="pic">
             <img src="../../assets/icon_distance.png" alt="personnes">
           </div>
@@ -42,7 +45,10 @@
             {{currentDiscover.distance}}
           </div>
         </div>
-        <div class="discover-icon d-inline-block" *ngIf="currentDiscover.distanceDuration">
+        <div class="discover-icon d-inline-block popover-wrapper" *ngIf="currentDiscover.distanceDuration">
+            <div class="popover-content">
+                {{'Durée du trajet en voiture' | translate}}
+              </div>
           <div class="pic">
             <img src="../../assets/icon_distance_duration.png" alt="personnes">
           </div>
@@ -50,7 +56,10 @@
             {{currentDiscover.distanceDuration}}
           </div>
         </div>
-        <div class="discover-icon d-inline-block" *ngIf="currentDiscover.duration">
+        <div class="discover-icon d-inline-block popover-wrapper" *ngIf="currentDiscover.duration">
+            <div class="popover-content">
+                {{'Durée du trajet à pied' | translate}}
+              </div>
           <div class="pic">
             <img src="../../assets/icon_duration.png" alt="personnes">
           </div>
@@ -58,15 +67,13 @@
             {{currentDiscover.duration}}
           </div>
         </div>
-
         <div class="d-inline-block pull-right" *ngIf="isAdmin">
           <button class="btn btn-primary mr-2" (click)="discoverModal(editDiscoverTemplate, currentDiscover)">Edit</button>
           <button class="btn btn-danger" (click)="deleteDiscover(currentDiscover)">Delete</button>
         </div>
       </div>
       <div class="row col-md-12">
-        <div class="col-md-6 p-0 pr-2 pl-2 discover-description">
-          {{getDiscoverProperty(currentDiscover, 'description')}}
+        <div class="col-md-6 p-0 pr-2 pl-2 discover-description" [innerHTML]="getDiscoverProperty(currentDiscover, 'description')">
         </div>
         <div class="col-md-6 p-0">
           <iframe width="100%" height="300px" frameborder="0" allowfullscreen
